@@ -280,6 +280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1ea0aa038afc4233bf430c0d8f88457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  garden: []
 --- !u!4 &1221782668
 Transform:
   m_ObjectHideFlags: 0
