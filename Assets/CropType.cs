@@ -3,6 +3,7 @@ public class CropType {
     public int turnsToHarvest;
     public int buyPrice;
     public int sellPrice;
+    public Tetromino shape;
 }
 
 public static class CropTemplates {

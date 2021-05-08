@@ -11,12 +11,12 @@ public class Farm : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         for (var x = 0; x < 4; x++) {
-            for (var y = 0; y < 4; x++) {
-                // gardenTilePrefab = (GameObject) Resources.Load("Prefabs/GardenTile");
-                // var tile = Object.Instantiate(gardenTilePrefab, this.transform);
-                // tile.GetComponent<GardenTile>().x = x;
-                // tile.GetComponent<GardenTile>().y = y;
-                // dataStore.garden.Add(tile);
+            for (var y = 0; y < 4; y++) {
+                gardenTilePrefab = (GameObject) Resources.Load("Prefabs/GardenTile");
+                var tile = Object.Instantiate(gardenTilePrefab, this.transform);
+                tile.GetComponent<GardenTile>().x = x;
+                tile.GetComponent<GardenTile>().y = y;
+                dataStore.garden.Add(tile);
             }
         }
     }
