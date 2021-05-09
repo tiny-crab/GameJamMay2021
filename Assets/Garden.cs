@@ -7,6 +7,7 @@ public class Garden : MonoBehaviour
     public Datastore dataStore;
 
     public GameObject gardenTilePrefab;
+    public GameObject cropPrefab;
     public int width;
     public int height;
 
@@ -21,10 +22,11 @@ public class Garden : MonoBehaviour
                 var spriteWidth = tile.GetComponent<SpriteRenderer>().bounds.size.x;
                 var spriteHeight = tile.GetComponent<SpriteRenderer>().bounds.size.y;
                 if ((x + y) % 2 == 0) {
-                    tile.GetComponent<SpriteRenderer>().color = Color.blue;
+                    tile.GetComponent<SpriteRenderer>().color = dataStore.colors["DARK_GREEN"];
                 } else {
-                    tile.GetComponent<SpriteRenderer>().color = Color.green;
+                    tile.GetComponent<SpriteRenderer>().color = dataStore.colors["GREEN"];
                 }
+                //tile.GetComponent<SpriteRenderer>().sprite = Resources.Load("Assets/Sprites/SUNNYSIDE_WORLD_CROPS_V0.01/ASSETS/soil_01.png", typeOf(Sprite));
                 tile.transform.position = new Vector2((x * spriteWidth) + dataStore.garden.transform.position.x, (y * spriteHeight) + dataStore.garden.transform.position.y);
                 tile.layer = 6;
                 dataStore.gardenGrid.Add(tile);
@@ -71,7 +73,12 @@ public class Garden : MonoBehaviour
             for (int i = 0; i < dataStore.gardenGrid.Count; i++) {
                 GardenTile tile = dataStore.gardenGrid[i].GetComponent<GardenTile>();
                 if (tile.x == mouseRelativeCoordinate.x && tile.y == mouseRelativeCoordinate.y) {
-                    tile.crop = tet.cropType;
+                    cropPrefab = (GameObject) Resources.Load("Prefabs/Crop");
+                    // GameObject copyCropPrefab = cropPrefab.Clone();
+                    GameObject crop = (GameObject) Object.Instantiate(cropPrefab, tile.transform);
+                    Crop cropClass = crop.GetComponent<Crop>();
+                    cropClass.cropType = CropTemplates.Potato;
+                    tile.crop = cropClass;
                     tile.GetComponent<SpriteRenderer>().color = Color.yellow;
                 }
             }

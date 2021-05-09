@@ -1,14 +1,19 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UniRx;
+
 public class CropType {
     public string name;
-    public int turnsToHarvest;
     public int buyPrice;
     public int sellPrice;
-    public Tetromino shape;
+    public int turnsToHarvest;
+
 }
 
 public static class CropTemplates {
-    public static CropType Tomato = new CropType() {
-            name = "Tomato",
+    public static CropType Potato = new CropType() {
+            name = "Potato",
             turnsToHarvest = 4,
             buyPrice = 4,
             sellPrice = 6
