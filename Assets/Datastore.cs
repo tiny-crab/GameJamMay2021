@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Datastore : MonoBehaviour
 {
-    public Dictionary<string, int> SeedInventory;
+    public Dictionary<CropType, int> SeedInventory;
 
     public List<GameObject> garden;
 }
