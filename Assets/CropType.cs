@@ -7,10 +7,16 @@ public class CropType {
 }
 
 public static class CropTemplates {
-    public static CropType Tomato = new CropType() {
-            name = "Tomato",
+    public static CropType Potato = new CropType() {
+            name = "Potato",
             turnsToHarvest = 4,
             buyPrice = 4,
-            sellPrice = 6
+            sellPrice = 6,
+    };
+    public static CropType Radish = new CropType() {
+            name = "Radish",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
     };
 }

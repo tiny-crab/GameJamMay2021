@@ -496,6 +496,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f2339109da6b4ca9bd6262b95b54c28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  datastore: {fileID: 1221782667}
   cropCardPrefab: {fileID: 0}
   layoutGroupObject: {fileID: 525915633}
 --- !u!4 &940224315
