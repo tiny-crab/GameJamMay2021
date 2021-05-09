@@ -9,4 +9,6 @@ public class Datastore : MonoBehaviour
     public List<GameObject> gardenGrid;
 
     public Garden garden;
+
+    public Tetromino heldShape;
 }

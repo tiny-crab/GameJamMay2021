@@ -194,7 +194,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 156343443}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.57, y: 0, z: 0}
+  m_LocalPosition: {x: -8.75, y: 0.77, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 22268497}
@@ -215,7 +215,7 @@ MonoBehaviour:
   dataStore: {fileID: 1221782667}
   gardenTilePrefab: {fileID: 6401033417493587802, guid: dec385c6711c94a46aebaa0bda3ce616,
     type: 3}
-  width: 4
+  width: 8
   height: 4
 --- !u!1 &325843396
 GameObject:

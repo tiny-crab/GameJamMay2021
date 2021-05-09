@@ -4,12 +4,56 @@ using UnityEngine;
 
 public class Tetromino {
 
-    public List<Vector2> coordinates;
+    private static Dictionary<Rotation, Rotation> rotationMapping = new Dictionary<Rotation, Rotation>() {
+        {Rotation.ZERO, Rotation.NINETY}, {Rotation.NINETY, Rotation.ONEEIGHTY}, {Rotation.ONEEIGHTY, Rotation.TWOSEVENTY}, {Rotation.TWOSEVENTY, Rotation.ZERO}
+    };
+
+    private List<Vector2> coordinates;
     public CropType cropType;
+    public Rotation rotation;
 
     public Tetromino(List<Vector2> coordinates, CropType cropType) {
         this.coordinates = coordinates;
         this.cropType = cropType;
+        this.rotation = Rotation.ZERO;
+    }
+
+    public void rotate() {
+        this.rotation = rotationMapping[this.rotation];
+        Debug.Log(this.rotation);
+        Vector2 modificationVector = new Vector2(-1, 1);
+        for (int i = 0; i < this.coordinates.Count; i++) {
+            Vector2 coordinate = this.coordinates[i];
+            float x = coordinate.x;
+            float y = coordinate.y;
+            coordinate.x = y;
+            coordinate.y = x * -1;
+            this.coordinates[i] = coordinate;
+        }
+        
+    }
+
+    public List<Vector2> getCoordinates() {
+        // Vector2 modificationVector = new Vector2();
+        // if (this.rotation == Rotation.ZERO) {
+        //     modificationVector.x = 1;
+        //     modificationVector.y = 1;
+        // } else if (this.rotation == Rotation.NINETY) {
+        //     modificationVector.x = -1;
+        //     modificationVector.y = 1;
+        // } else if (this.rotation == Rotation.ONEEIGHTY) {
+        //     modificationVector.x = -1;
+        //     modificationVector.y = -1;
+        // } else if (this.rotation == Rotation.TWOSEVENTY) {
+        //     modificationVector.x = 1;
+        //     modificationVector.y = -1;
+        // }
+        // List<Vector2> modifiedList = new List<Vector2>();
+        // for (int i = 0; i < this.coordinates.Count; i++) {
+        //     modifiedList.Add(new Vector2(this.coordinates[i].x, this.coordinates[i].y) * modificationVector);
+        // }
+        // return modifiedList;
+        return this.coordinates;
     }
 
 }

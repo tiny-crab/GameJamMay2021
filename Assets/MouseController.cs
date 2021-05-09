@@ -8,7 +8,7 @@ public class MouseController : MonoBehaviour
 
     public GameObject gardenTilePrefab;
 
-    public Tetromino heldShape;
+    
     private List<GameObject> heldShapeTiles = new List<GameObject>();
 
     private GardenTile hitTile;
@@ -19,9 +19,9 @@ public class MouseController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        this.heldShape = TetrominoTemplates.createShapeWithCropType(ShapeType.T, CropTemplates.Tomato);
+        dataStore.heldShape = TetrominoTemplates.createShapeWithCropType(ShapeType.T, CropTemplates.Tomato);
 
-        for (int i = 0; i < this.heldShape.coordinates.Count; i++) {
+        for (int i = 0; i < dataStore.heldShape.getCoordinates().Count; i++) {
             GameObject tile = Object.Instantiate(gardenTilePrefab, this.transform);
             heldShapeTiles.Add(tile);
         }
@@ -30,23 +30,27 @@ public class MouseController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetKeyDown("space")) {
             for (int i = 0; i < this.heldShapeTiles.Count; i++) {
                 Destroy(this.heldShapeTiles[i]);
             }
 
             List<ShapeType> shapeTypes = new List<ShapeType>() { ShapeType.T, ShapeType.Square, ShapeType.L, ShapeType.I };
             ShapeType shapeType = (ShapeType) shapeTypes[(int) Random.Range(0, shapeTypes.Count)];
-            this.heldShape = TetrominoTemplates.createShapeWithCropType(shapeType, CropTemplates.Tomato);
+            dataStore.heldShape = TetrominoTemplates.createShapeWithCropType(shapeType, CropTemplates.Tomato);
 
             this.heldShapeTiles.Clear();
 
             
 
-            for (int i = 0; i < this.heldShape.coordinates.Count; i++) {
+            for (int i = 0; i < dataStore.heldShape.getCoordinates().Count; i++) {
                 GameObject tile = Object.Instantiate(gardenTilePrefab, this.transform);
                 heldShapeTiles.Add(tile);
             }
+        }
+
+        if (Input.GetKeyDown("r")) {
+            dataStore.heldShape.rotate();
         }
 
         bool newTileHit = false;
@@ -57,8 +61,8 @@ public class MouseController : MonoBehaviour
             //Debug.Log("Hit Garden Tile");
             GardenTile newTile = rayHit.collider.GetComponent<GardenTile>();
             if (hitTile == null || hitTile.x != newTile.x || hitTile.y != newTile.y) {
-                validPlacement = dataStore.garden.checkShapeValidOnGarden(heldShape, new Vector2(newTile.x, newTile.y));
-                Debug.Log("Valid?:" + validPlacement);
+                validPlacement = dataStore.garden.checkShapeValidOnGarden(dataStore.heldShape, new Vector2(newTile.x, newTile.y));
+                //Debug.Log("Valid?:" + validPlacement);
                 hitTile = newTile;
                 newTileHit = true;
             }
@@ -69,29 +73,32 @@ public class MouseController : MonoBehaviour
 
         //Set position of held Tetromino based on mouse position or hovered garden tile
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        for (int i = 0; i < this.heldShape.coordinates.Count; i++) {
+        for (int i = 0; i < dataStore.heldShape.getCoordinates().Count; i++) {
             GameObject tile = this.heldShapeTiles[i];
             var spriteWidth = tile.GetComponent<SpriteRenderer>().bounds.size.x;
             var spriteHeight = tile.GetComponent<SpriteRenderer>().bounds.size.y;
             GardenTile gardenTile = tile.GetComponent<GardenTile>();
-            Vector2 coordinate = this.heldShape.coordinates[i];
+            Vector2 coordinate = dataStore.heldShape.getCoordinates()[i];
             Vector2 center;
             if (hitTile != null) {
                 center = hitTile.transform.position;
             } else {
                 center = mousePosition;
             }
-            //Debug.Log("ValidPlacement?: " + validPlacement);
             if (validPlacement) {
-                Debug.Log("Setting to Green");
                 tile.GetComponent<SpriteRenderer>().color = Color.white;
             } else {
-                //Debug.Log("Setting to Red");
                 tile.GetComponent<SpriteRenderer>().color = Color.red;
             }
             if (!newTileHit || hitTile == null)  {
                 tile.transform.position = new Vector2((coordinate.x * spriteWidth) + center.x, (coordinate.y * spriteHeight) + center.y);
             }
+        }
+        
+        if (Input.GetMouseButtonDown(0)) {
+            if (validPlacement) {
+                dataStore.garden.placeTiles(dataStore.heldShape, new Vector2(hitTile.x, hitTile.y));
+            }        
         }
     }
 }

@@ -39,9 +39,9 @@ public class Garden : MonoBehaviour
     }
 
     public bool checkShapeValidOnGarden(Tetromino tet, Vector2 mouseCoords) {
-        for (int t = 0; t < tet.coordinates.Count; t++) {
+        for (int t = 0; t < tet.getCoordinates().Count; t++) {
             bool foundTile = false;
-            Vector2 tetRelativeCoordinate = tet.coordinates[t];
+            Vector2 tetRelativeCoordinate = tet.getCoordinates()[t];
             Vector2 mouseRelativeCoordinate = new Vector2(tetRelativeCoordinate.x + mouseCoords.x, tetRelativeCoordinate.y + mouseCoords.y);
             for (int i = 0; i < dataStore.gardenGrid.Count; i++) {
                 GardenTile tile = dataStore.gardenGrid[i].GetComponent<GardenTile>();
@@ -50,7 +50,7 @@ public class Garden : MonoBehaviour
                     if (tile.crop != null) {
                         return false;
                     } else {
-                        if (t == tet.coordinates.Count - 1) {
+                        if (t == tet.getCoordinates().Count - 1) {
                             return true;
                         }
                         break;
@@ -62,5 +62,19 @@ public class Garden : MonoBehaviour
             }
         }
         return true;
+    }
+
+    public void placeTiles(Tetromino tet, Vector2 mouseCoords) {
+        for (int t = 0; t < tet.getCoordinates().Count; t++) {
+            Vector2 tetRelativeCoordinate = tet.getCoordinates()[t];
+            Vector2 mouseRelativeCoordinate = new Vector2(tetRelativeCoordinate.x + mouseCoords.x, tetRelativeCoordinate.y + mouseCoords.y);
+            for (int i = 0; i < dataStore.gardenGrid.Count; i++) {
+                GardenTile tile = dataStore.gardenGrid[i].GetComponent<GardenTile>();
+                if (tile.x == mouseRelativeCoordinate.x && tile.y == mouseRelativeCoordinate.y) {
+                    tile.crop = tet.cropType;
+                    tile.GetComponent<SpriteRenderer>().color = Color.yellow;
+                }
+            }
+        }
     }
 }
