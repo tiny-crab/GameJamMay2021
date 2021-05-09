@@ -19,7 +19,7 @@ public class MouseController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        dataStore.heldShape = TetrominoTemplates.createShapeWithCropType(ShapeType.T, CropTemplates.Tomato);
+        dataStore.heldShape = TetrominoTemplates.createShapeWithCropType(ShapeType.T, CropTemplates.Potato);
 
         for (int i = 0; i < dataStore.heldShape.getCoordinates().Count; i++) {
             GameObject tile = Object.Instantiate(gardenTilePrefab, this.transform);
@@ -35,22 +35,31 @@ public class MouseController : MonoBehaviour
                 Destroy(this.heldShapeTiles[i]);
             }
 
-            List<ShapeType> shapeTypes = new List<ShapeType>() { ShapeType.T, ShapeType.Square, ShapeType.L, ShapeType.I };
+            List<ShapeType> shapeTypes = new List<ShapeType>() { ShapeType.T, ShapeType.Square, ShapeType.L, ShapeType.I, ShapeType.S, ShapeType.SMirror, ShapeType.LMirror };
             ShapeType shapeType = (ShapeType) shapeTypes[(int) Random.Range(0, shapeTypes.Count)];
-            dataStore.heldShape = TetrominoTemplates.createShapeWithCropType(shapeType, CropTemplates.Tomato);
+            dataStore.heldShape = TetrominoTemplates.createShapeWithCropType(shapeType, CropTemplates.Potato);
 
             this.heldShapeTiles.Clear();
-
-            
 
             for (int i = 0; i < dataStore.heldShape.getCoordinates().Count; i++) {
                 GameObject tile = Object.Instantiate(gardenTilePrefab, this.transform);
                 heldShapeTiles.Add(tile);
             }
+
+            if (hitTile != null) {
+                validPlacement = dataStore.garden.checkShapeValidOnGarden(dataStore.heldShape, new Vector2(hitTile.x, hitTile.y));
+            }
         }
 
         if (Input.GetKeyDown("r")) {
             dataStore.heldShape.rotate();
+            if (hitTile != null) {
+                validPlacement = dataStore.garden.checkShapeValidOnGarden(dataStore.heldShape, new Vector2(hitTile.x, hitTile.y));
+            }
+        }
+
+        if (Input.GetKeyDown("w")) {
+            dataStore.turnCount.Value++;
         }
 
         bool newTileHit = false;

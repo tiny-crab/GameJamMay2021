@@ -7,24 +7,27 @@ public class Garden : MonoBehaviour
     public Datastore dataStore;
 
     public GameObject gardenTilePrefab;
+    public GameObject cropPrefab;
     public int width;
     public int height;
 
     // Start is called before the first frame update
     void Start() {
+        cropPrefab = (GameObject) Resources.Load("Prefabs/Crop");
+        gardenTilePrefab = (GameObject) Resources.Load("Prefabs/GardenTile");
         for (var x = 0; x < width; x++) {
             for (var y = 0; y < height; y++) {
-                gardenTilePrefab = (GameObject) Resources.Load("Prefabs/GardenTile");
                 GameObject tile = (GameObject) Object.Instantiate(gardenTilePrefab, this.transform);
                 tile.GetComponent<GardenTile>().x = x;
                 tile.GetComponent<GardenTile>().y = y;
                 var spriteWidth = tile.GetComponent<SpriteRenderer>().bounds.size.x;
                 var spriteHeight = tile.GetComponent<SpriteRenderer>().bounds.size.y;
                 if ((x + y) % 2 == 0) {
-                    tile.GetComponent<SpriteRenderer>().color = Color.blue;
+                    tile.GetComponent<SpriteRenderer>().color = dataStore.colors["DARK_GREEN"];
                 } else {
-                    tile.GetComponent<SpriteRenderer>().color = Color.green;
+                    tile.GetComponent<SpriteRenderer>().color = dataStore.colors["GREEN"];
                 }
+                //tile.GetComponent<SpriteRenderer>().sprite = Resources.Load("Assets/Sprites/SUNNYSIDE_WORLD_CROPS_V0.01/ASSETS/soil_01.png", typeOf(Sprite));
                 tile.transform.position = new Vector2((x * spriteWidth) + dataStore.garden.transform.position.x, (y * spriteHeight) + dataStore.garden.transform.position.y);
                 tile.layer = 6;
                 dataStore.gardenGrid.Add(tile);
@@ -71,7 +74,11 @@ public class Garden : MonoBehaviour
             for (int i = 0; i < dataStore.gardenGrid.Count; i++) {
                 GardenTile tile = dataStore.gardenGrid[i].GetComponent<GardenTile>();
                 if (tile.x == mouseRelativeCoordinate.x && tile.y == mouseRelativeCoordinate.y) {
-                    tile.crop = tet.cropType;
+                    GameObject crop = (GameObject) Object.Instantiate(cropPrefab, tile.transform.position, Quaternion.identity, tile.transform);
+                    crop.transform.position = new Vector3(crop.transform.position.x, crop.transform.position.y, -5);
+                    Crop cropClass = crop.GetComponent<Crop>();
+                    cropClass.cropType = CropTemplates.Potato;
+                    tile.crop = cropClass;
                     tile.GetComponent<SpriteRenderer>().color = Color.yellow;
                 }
             }
