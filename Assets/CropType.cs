@@ -8,6 +8,8 @@ public class CropType {
     public int buyPrice;
     public int sellPrice;
     public int turnsToHarvest;
+    public List<string> spritePaths;
+    
 
 }
 
@@ -16,6 +18,14 @@ public static class CropTemplates {
             name = "Potato",
             turnsToHarvest = 4,
             buyPrice = 4,
-            sellPrice = 6
+            sellPrice = 6,
+            spritePaths = new List<string>() {
+                "Crops/potato_01",
+                "Crops/potato_02",
+                "Crops/potato_03",
+                "Crops/potato_04",
+                "Crops/potato_05",
+                
+            }
     };
 }

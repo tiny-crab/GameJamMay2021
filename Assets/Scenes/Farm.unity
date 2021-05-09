@@ -215,6 +215,7 @@ MonoBehaviour:
   dataStore: {fileID: 1221782667}
   gardenTilePrefab: {fileID: 6401033417493587802, guid: dec385c6711c94a46aebaa0bda3ce616,
     type: 3}
+  cropPrefab: {fileID: 0}
   width: 8
   height: 4
 --- !u!1 &325843396
@@ -377,6 +378,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gardenGrid: []
   garden: {fileID: 156343445}
+  turnCount:
+    value: 0
 --- !u!4 &1221782668
 Transform:
   m_ObjectHideFlags: 0

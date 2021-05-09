@@ -13,9 +13,10 @@ public class Garden : MonoBehaviour
 
     // Start is called before the first frame update
     void Start() {
+        cropPrefab = (GameObject) Resources.Load("Prefabs/Crop");
+        gardenTilePrefab = (GameObject) Resources.Load("Prefabs/GardenTile");
         for (var x = 0; x < width; x++) {
             for (var y = 0; y < height; y++) {
-                gardenTilePrefab = (GameObject) Resources.Load("Prefabs/GardenTile");
                 GameObject tile = (GameObject) Object.Instantiate(gardenTilePrefab, this.transform);
                 tile.GetComponent<GardenTile>().x = x;
                 tile.GetComponent<GardenTile>().y = y;
@@ -73,9 +74,8 @@ public class Garden : MonoBehaviour
             for (int i = 0; i < dataStore.gardenGrid.Count; i++) {
                 GardenTile tile = dataStore.gardenGrid[i].GetComponent<GardenTile>();
                 if (tile.x == mouseRelativeCoordinate.x && tile.y == mouseRelativeCoordinate.y) {
-                    cropPrefab = (GameObject) Resources.Load("Prefabs/Crop");
-                    // GameObject copyCropPrefab = cropPrefab.Clone();
-                    GameObject crop = (GameObject) Object.Instantiate(cropPrefab, tile.transform);
+                    GameObject crop = (GameObject) Object.Instantiate(cropPrefab, tile.transform.position, Quaternion.identity, tile.transform);
+                    crop.transform.position = new Vector3(crop.transform.position.x, crop.transform.position.y, -5);
                     Crop cropClass = crop.GetComponent<Crop>();
                     cropClass.cropType = CropTemplates.Potato;
                     tile.crop = cropClass;
