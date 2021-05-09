@@ -10,5 +10,9 @@ public class Datastore : MonoBehaviour
         {CropTemplates.Potato, 3}
     };
 
-    public List<GameObject> garden;
+    public List<GameObject> gardenGrid;
+
+    public Garden garden;
+
+    public Tetromino heldShape;
 }
