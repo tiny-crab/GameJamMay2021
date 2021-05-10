@@ -18,21 +18,29 @@ public class InventoryShop : MonoBehaviour
 
     public Dictionary<CropType, GameObject> shopCards = new Dictionary<CropType, GameObject>();
     public Dictionary<CropType, GameObject> inventoryCards = new Dictionary<CropType, GameObject>();
+    public ReactiveProperty<GameObject> selectedCard = new ReactiveProperty<GameObject>();
 
     void clickShopCard(GameObject cropCard, CropType crop) {
-        if (datastore.seedInventory.Keys.Contains(crop)) {
+        if (cropCard == selectedCard.Value) {
+            if (datastore.seedInventory.Keys.Contains(crop)) {
             var currentCount = datastore.seedInventory[crop].Value;
             datastore.seedInventory[crop].SetValueAndForceNotify(currentCount + 1);
-        } else {
-            datastore.seedInventory[crop] = new IntReactiveProperty(1);
+            } else {
+                datastore.seedInventory[crop] = new IntReactiveProperty(1);
+            }
+            Debug.Log($"Purchased {crop.name} for total {datastore.seedInventory[crop].Value} seeds.");
         }
-        Debug.Log($"Purchased {crop.name} for total {datastore.seedInventory[crop].Value} seeds.");
+        else {
+            selectedCard.SetValueAndForceNotify(cropCard);
+        }
+
     }
 
     void clickInventoryCard(GameObject cropCard, CropType crop) {
         if (datastore.seedInventory.Keys.Contains(crop)) {
             var currentCount = datastore.seedInventory[crop].Value;
             if (currentCount > 0) {
+                selectedCard.SetValueAndForceNotify(cropCard);
                 datastore.seedInventory[crop].SetValueAndForceNotify(currentCount - 1);
                 Debug.Log($"Planted {crop.name} with only {datastore.seedInventory[crop].Value} seeds remaining.");
             }
@@ -46,16 +54,21 @@ public class InventoryShop : MonoBehaviour
             .OrderByDescending(entry => entry.Key.name).ToList()
             .ForEach(entry => {
                 var cropCard = Object.Instantiate(cropInventoryCardPrefab, layoutGroupObject.transform);
+
                 inventoryCards[entry.Key] = cropCard;
                 cropCard.transform.localScale = new Vector3(.25f, .25f, 1);
                 cropCard.transform.Find("CropIcon").GetComponent<Image>().sprite = Resources.Load<Sprite>(entry.Key.spritePaths.Last());
-                cropCard.transform.Find("SelectedIndicators").gameObject.Children().ForEach(indicator => indicator.SetActive(false));
                 cropCard.transform.Find("DurationText").GetComponent<Text>().text = $"{entry.Key.turnsToHarvest}";
                 entry.Value.SubscribeToText(cropCard.transform.Find("QuantityText").GetComponent<Text>(), quant => $"x{quant}");
                 entry.Value.Subscribe(quant => {
                     cropCard.transform.Find("QuantityText").GetComponent<Text>().color = quant == 0 ? Color.red : Color.black;
                 });
 
+                var selectedIndicators = cropCard.transform.Find("SelectedIndicators").gameObject.Children();
+                selectedIndicators.ForEach(indicator => indicator.SetActive(false));
+                selectedCard.Subscribe(selectedCard => {
+                    selectedIndicators.ForEach(indicator => indicator.SetActive(selectedCard == cropCard));
+                });
 
                 var button = cropCard.GetComponentInChildren<Button>();
                 button.onClick.AddListener(() => clickInventoryCard(cropCard, entry.Key));
@@ -72,9 +85,15 @@ public class InventoryShop : MonoBehaviour
                 shopCards[cropType] = cropCard;
                 cropCard.transform.localScale = new Vector3(.25f, .25f, 1);
                 cropCard.transform.Find("CropIcon").GetComponent<Image>().sprite = Resources.Load<Sprite>(cropType.spritePaths.Last());
-                cropCard.transform.Find("SelectedIndicators").gameObject.Children().ForEach(indicator => indicator.SetActive(false));
                 cropCard.transform.Find("DurationText").GetComponent<Text>().text = $"{cropType.turnsToHarvest}";
                 cropCard.transform.Find("BuyText").GetComponent<Text>().text = $"${cropType.buyPrice}";
+
+                var selectedIndicators = cropCard.transform.Find("SelectedIndicators").gameObject.Children();
+                selectedIndicators.ForEach(indicator => indicator.SetActive(false));
+                selectedCard.Subscribe(selectedCard => {
+                    selectedIndicators.ForEach(indicator => indicator.SetActive(selectedCard == cropCard));
+                });
+
                 var button = cropCard.GetComponentInChildren<Button>();
                 button.onClick.AddListener(() => clickShopCard(cropCard, cropType));
         });
