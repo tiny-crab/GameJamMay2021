@@ -18,23 +18,19 @@ public class Crop : MonoBehaviour
             if (turnsAlive > 0) {
                 int turnsUntilMature = cropType.turnsToHarvest - turnsAlive;
                 float percentageComplete = ((float) turnsUntilMature) / ((float) cropType.turnsToHarvest);
-                int invertedIndex = Convert.ToInt32(Math.Floor(cropType.spritePaths.Count * percentageComplete));
-                int index = cropType.spritePaths.Count - invertedIndex - 1;
-                Debug.Log($"Index: {index}");
-                int clampedIndex = Math.Min(index, cropType.spritePaths.Count - 1);
-                Debug.Log($"ClampedIndex: {clampedIndex}");
+                int invertedIndex = Convert.ToInt32(Math.Floor(cropType.spritePathCount * percentageComplete));
+                int index = cropType.spritePathCount - invertedIndex;
+                int clampedIndex = Math.Min(index, cropType.spritePathCount);
 
                 SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-                Sprite sprite = Resources.Load(cropType.spritePaths[index], typeof(Sprite)) as Sprite;
+                Sprite sprite = Resources.Load($"Crops/{cropType.name.ToLower()}_0{clampedIndex}", typeof(Sprite)) as Sprite;
                 spriteRenderer.sprite = sprite;
-                Debug.Log($"Maturing: {turnsUntilMature}");
             }    
-            
         });
-        this.transform.localScale = new Vector2(7,7);
+        this.transform.localScale = new Vector2(5,5);
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 
-        Sprite sprite = Resources.Load(cropType.spritePaths[0], typeof(Sprite)) as Sprite;
+        Sprite sprite = Resources.Load($"Crops/{cropType.name.ToLower()}_01", typeof(Sprite)) as Sprite;
         spriteRenderer.sprite = sprite;
     }
 

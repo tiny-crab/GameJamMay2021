@@ -9,30 +9,91 @@ public class CropType {
 }
 
 public static class CropTemplates {
-    public static CropType Radish = new CropType() {
-            name = "Radish",
-            turnsToHarvest = 3,
-            buyPrice = 6,
-            sellPrice = 10,
-            spritePaths = new List<string>() {
-                "Crops/potato_01",
-                "Crops/potato_02",
-                "Crops/potato_03",
-                "Crops/potato_04",
-                "Crops/potato_05",
-            }
-    };
+    
     public static CropType Potato = new CropType() {
             name = "Potato",
-            turnsToHarvest = 5,
-            buyPrice = 2,
-            sellPrice = 5,
-            spritePaths = new List<string>() {
-                "Crops/potato_01",
-                "Crops/potato_02",
-                "Crops/potato_03",
-                "Crops/potato_04",
-                "Crops/potato_05",
-            }
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+    public static CropType Radish = new CropType() {
+            name = "Radish",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+
+    public static CropType Pumpkin = new CropType() {
+            name = "Pumpkin",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+    public static CropType Beetroot = new CropType() {
+            name = "Beetroot",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+    public static CropType Cabbage = new CropType() {
+            name = "Cabbage",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+
+    public static CropType Carrot = new CropType() {
+            name = "Carrot",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+
+    public static CropType Cauliflower = new CropType() {
+            name = "Cauliflower",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+    public static CropType Kale = new CropType() {
+            name = "Kale",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+    public static CropType Parsnip = new CropType() {
+            name = "Parsnip",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+    public static CropType Wheat = new CropType() {
+            name = "Wheat",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+
+    public static CropType Sunflower = new CropType() {
+            name = "Sunflower",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+
+    public static List<CropType> cropTypes = new List<CropType>() {
+        CropTemplates.Potato, CropTemplates.Radish, CropTemplates.Pumpkin, CropTemplates.Beetroot, CropTemplates.Cabbage,
+        CropTemplates.Carrot, CropTemplates.Cauliflower, CropTemplates.Kale, CropTemplates.Parsnip, CropTemplates.Wheat, CropTemplates.Sunflower
     };
 }
