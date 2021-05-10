@@ -5,7 +5,7 @@ using UniRx;
 
 public class Datastore : MonoBehaviour
 {
-    public Dictionary<CropType, int> SeedInventory;
+    public Dictionary<CropType, int> SeedInventory = new Dictionary<CropType, int>();
     public List<CropType> storeInventory = new List<CropType>() {
         CropTemplates.Radish, CropTemplates.Potato
     };

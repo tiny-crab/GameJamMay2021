@@ -11,9 +11,9 @@ public class CropType {
 public static class CropTemplates {
     public static CropType Radish = new CropType() {
             name = "Radish",
-            turnsToHarvest = 4,
-            buyPrice = 4,
-            sellPrice = 6,
+            turnsToHarvest = 3,
+            buyPrice = 6,
+            sellPrice = 10,
             spritePaths = new List<string>() {
                 "Crops/potato_01",
                 "Crops/potato_02",
@@ -24,9 +24,9 @@ public static class CropTemplates {
     };
     public static CropType Potato = new CropType() {
             name = "Potato",
-            turnsToHarvest = 4,
-            buyPrice = 4,
-            sellPrice = 6,
+            turnsToHarvest = 5,
+            buyPrice = 2,
+            sellPrice = 5,
             spritePaths = new List<string>() {
                 "Crops/potato_01",
                 "Crops/potato_02",
