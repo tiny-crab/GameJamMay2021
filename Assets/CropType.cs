@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System;
+using UniRx;
 
 public class CropType {
     public string name;
@@ -6,6 +8,19 @@ public class CropType {
     public int sellPrice;
     public int turnsToHarvest;
     public int spritePathCount;
+    public IntReactiveProperty shapeType = new IntReactiveProperty();
+    private Random random;
+
+    public CropType() {
+        random = new Random();
+        shuffleShapeType();
+    }
+    
+    // If we want to persist the shapetype of the order as they are purchased we can keep a list of them and add them to the end
+    // as they are bought and remove them from the front as they are planted.
+    public void shuffleShapeType() {
+        shapeType.Value = (int) getRandomShapeType();
+    }
 
     public string getSpritePath(int index) {
         if (index < 1) {
@@ -15,6 +30,12 @@ public class CropType {
         }
 
         return $"Crops/{name.ToLower()}_0{index}";
+    }
+
+    //Putting this here for a sec becuase Unity refuses to let any form of random exist in any sort of static context, directly or indiretly, and its being a huge fucking bitch about it
+    private List<ShapeType> shapeTypes = new List<ShapeType>() { ShapeType.T, ShapeType.O, ShapeType.L, ShapeType.I, ShapeType.S, ShapeType.Z, ShapeType.J };
+    private ShapeType getRandomShapeType() {
+        return (ShapeType) shapeTypes[random.Next(0, shapeTypes.Count)];
     }
 }
 

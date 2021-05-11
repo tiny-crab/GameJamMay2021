@@ -14,7 +14,10 @@ public class Datastore : MonoBehaviour
 
     public Garden garden;
 
+    public MouseController mouseController;
+
     public Tetromino heldShape;
+    public Crop heldCrop;
 
     public IntReactiveProperty mouseState = new IntReactiveProperty(0);
 

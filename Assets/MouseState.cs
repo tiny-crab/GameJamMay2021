@@ -1,4 +1,5 @@
 public enum MouseState {
     DEFAULT,
-    PLANTING
+    PLANTING,
+    HOLDING
 }

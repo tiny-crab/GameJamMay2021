@@ -8,24 +8,26 @@ public class MouseController : MonoBehaviour
     public Datastore dataStore;
 
     public GameObject gardenTilePrefab;
+    public GameObject heldCropPrefab;
 
     
     private List<GameObject> heldShapeTiles = new List<GameObject>();
     private GardenTile hitTile;
     private bool validPlacement;
+    public GameObject locallyHeldCrop;
     
 
 
     // Start is called before the first frame update
     void Start()
     {
-        getNewShape();
-
         dataStore.mouseState.Subscribe(state => {
             if (state == (int) MouseState.DEFAULT) {
                 dropShape();
             } else if (state == (int) MouseState.PLANTING) {
-                getNewShape();
+
+            } else if (state == (int) MouseState.HOLDING) {
+
             }
         });
     }
@@ -41,9 +43,9 @@ public class MouseController : MonoBehaviour
             dataStore.mouseState.Value = (int) MouseState.PLANTING;
         }
 
-        if (Input.GetKeyDown("space")) {
-            getNewShape();
-        }
+        // if (Input.GetKeyDown("space")) {
+        //     getNewShape();
+        // }
 
         if (Input.GetKeyDown("r")) {
             dataStore.heldShape.rotate();
@@ -100,10 +102,7 @@ public class MouseController : MonoBehaviour
             }
             
             if (Input.GetMouseButtonDown(0)) {
-                if (validPlacement) {
-                    dataStore.garden.placeTiles(dataStore.heldShape, new Vector2(hitTile.x, hitTile.y));
-                    getNewShape();
-                }        
+                    plantSeeds();
             }
         } else if (dataStore.mouseState.Value == (int) MouseState.DEFAULT) {
 
@@ -121,13 +120,31 @@ public class MouseController : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0)) {
                 if (hitTile != null) {
-                    hitTile.harvest();
+                    Crop grabbedCrop = hitTile.grab();
+                    if (grabbedCrop != null) {
+                        dataStore.heldCrop = grabbedCrop;
+                        dataStore.heldCrop.setAlpha(0.5f);
+
+                        locallyHeldCrop = Object.Instantiate(heldCropPrefab, Input.mousePosition, Quaternion.identity);
+                        SpriteRenderer spriteRenderer = locallyHeldCrop.GetComponent<SpriteRenderer>();
+                        Sprite sprite = Resources.Load(dataStore.heldCrop.cropType.getSpritePath(dataStore.heldCrop.cropType.spritePathCount), typeof(Sprite)) as Sprite;
+                        spriteRenderer.sprite = sprite;
+                        locallyHeldCrop.transform.localScale = new Vector2(5,5);
+                        spriteRenderer.sortingOrder = 10;
+
+                        dataStore.mouseState.Value = (int) MouseState.HOLDING;
+                    }
                 }        
+            }
+        } else if (dataStore.mouseState.Value == (int) MouseState.HOLDING) {
+            if (Input.GetMouseButtonDown(0)) {
+                Destroy(locallyHeldCrop);
+                dataStore.heldCrop.setAlpha(1f);
+                dataStore.heldCrop = null;
+                dataStore.mouseState.Value = (int) MouseState.DEFAULT;
             }
         }
     }
-
-    
 
     private void dropShape() {
         for (int i = 0; i < this.heldShapeTiles.Count; i++) {
@@ -137,30 +154,40 @@ public class MouseController : MonoBehaviour
         this.hitTile = null;
     }
 
-    private void getNewShape() {
+    public void holdShape(CropType cropType) {
         for (int i = 0; i < this.heldShapeTiles.Count; i++) {
             Destroy(this.heldShapeTiles[i]);
         }
-
-        List<ShapeType> shapeTypes = new List<ShapeType>() { ShapeType.T, ShapeType.Square, ShapeType.L, ShapeType.I, ShapeType.S, ShapeType.SMirror, ShapeType.LMirror };
-        ShapeType shapeType = (ShapeType) shapeTypes[(int) Random.Range(0, shapeTypes.Count)];
-        int index = (int) Random.Range(0, CropTemplates.cropTypes.Count);
-        CropType cropType = (CropType) CropTemplates.cropTypes[index];
-        dataStore.heldShape = TetrominoTemplates.createShapeWithCropType(shapeType, cropType);
-
         this.heldShapeTiles.Clear();
+
+        dataStore.heldShape = TetrominoTemplates.createShapeWithCropType((ShapeType) cropType.shapeType.Value, cropType);
 
         for (int i = 0; i < dataStore.heldShape.getCoordinates().Count; i++) {
             GameObject tile = Object.Instantiate(gardenTilePrefab, this.transform);
             heldShapeTiles.Add(tile);
         }
-
-        if (hitTile != null) {
-            validPlacement = dataStore.garden.checkShapeValidOnGarden(dataStore.heldShape, new Vector2(hitTile.x, hitTile.y));
-        }
     }
 
-    public void holdShape() {
+    public void plantSeeds() {
+        if (validPlacement) {
+            dataStore.garden.placeTiles(dataStore.heldShape, new Vector2(hitTile.x, hitTile.y));
+            int currentCount = dataStore.seedInventory[dataStore.heldShape.cropType].Value;
+            dataStore.seedInventory[dataStore.heldShape.cropType].SetValueAndForceNotify(currentCount - 1);
+            dataStore.heldShape.cropType.shuffleShapeType();
+            hitTile = null;
+            dataStore.heldShape = null;
+            for (int i = 0; i < this.heldShapeTiles.Count; i++) {
+                Destroy(this.heldShapeTiles[i]);
+            } 
+            this.heldShapeTiles.Clear();
+            dataStore.mouseState.Value = (int) MouseState.DEFAULT;
+        } else if (!validPlacement && hitTile == null) {
+            dropShape();
+            dataStore.mouseState.Value = (int) MouseState.DEFAULT;
+        } else {
+            // Play invalid placement beeping sound
+        }
+
         
     }
 }

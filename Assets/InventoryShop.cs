@@ -36,13 +36,13 @@ public class InventoryShop : MonoBehaviour
 
     }
 
-    void clickInventoryCard(GameObject cropCard, CropType crop) {
-        if (datastore.seedInventory.Keys.Contains(crop)) {
-            var currentCount = datastore.seedInventory[crop].Value;
+    void clickInventoryCard(GameObject cropCard, CropType cropType) {
+        if (datastore.seedInventory.Keys.Contains(cropType)) {
+            var currentCount = datastore.seedInventory[cropType].Value;
             if (currentCount > 0) {
                 selectedCard.SetValueAndForceNotify(cropCard);
-                datastore.seedInventory[crop].SetValueAndForceNotify(currentCount - 1);
-                Debug.Log($"Planted {crop.name} with only {datastore.seedInventory[crop].Value} seeds remaining.");
+                datastore.mouseController.holdShape(cropType);
+                datastore.mouseState.Value = (int) MouseState.PLANTING;
             }
         }
     }
@@ -62,6 +62,9 @@ public class InventoryShop : MonoBehaviour
                 entry.Value.SubscribeToText(cropCard.transform.Find("QuantityText").GetComponent<Text>(), quant => $"x{quant}");
                 entry.Value.Subscribe(quant => {
                     cropCard.transform.Find("QuantityText").GetComponent<Text>().color = quant == 0 ? Color.red : Color.black;
+                });
+                entry.Key.shapeType.Subscribe(shapeType => {
+                    cropCard.transform.Find("ShapeIcon").GetComponent<Image>().sprite = Resources.Load<Sprite>(ShapeTypeImages.ShapeTypeToSpriteLocation[(ShapeType) shapeType]);
                 });
 
                 var selectedIndicators = cropCard.transform.Find("SelectedIndicators").gameObject.Children();
