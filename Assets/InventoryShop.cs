@@ -57,7 +57,7 @@ public class InventoryShop : MonoBehaviour
 
                 inventoryCards[entry.Key] = cropCard;
                 cropCard.transform.localScale = new Vector3(.25f, .25f, 1);
-                cropCard.transform.Find("CropIcon").GetComponent<Image>().sprite = Resources.Load<Sprite>(entry.Key.spritePaths.Last());
+                cropCard.transform.Find("CropIcon").GetComponent<Image>().sprite = Resources.Load<Sprite>(entry.Key.getSpritePath(entry.Key.spritePathCount));
                 cropCard.transform.Find("DurationText").GetComponent<Text>().text = $"{entry.Key.turnsToHarvest}";
                 entry.Value.SubscribeToText(cropCard.transform.Find("QuantityText").GetComponent<Text>(), quant => $"x{quant}");
                 entry.Value.Subscribe(quant => {
@@ -84,7 +84,7 @@ public class InventoryShop : MonoBehaviour
                 var cropCard = Object.Instantiate(cropShopCardPrefab, layoutGroupObject.transform);
                 shopCards[cropType] = cropCard;
                 cropCard.transform.localScale = new Vector3(.25f, .25f, 1);
-                cropCard.transform.Find("CropIcon").GetComponent<Image>().sprite = Resources.Load<Sprite>(cropType.spritePaths.Last());
+                cropCard.transform.Find("CropIcon").GetComponent<Image>().sprite = Resources.Load<Sprite>(cropType.getSpritePath(cropType.spritePathCount));
                 cropCard.transform.Find("DurationText").GetComponent<Text>().text = $"{cropType.turnsToHarvest}";
                 cropCard.transform.Find("BuyText").GetComponent<Text>().text = $"${cropType.buyPrice}";
 

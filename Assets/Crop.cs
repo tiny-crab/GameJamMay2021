@@ -23,14 +23,14 @@ public class Crop : MonoBehaviour
                 int clampedIndex = Math.Min(index, cropType.spritePathCount);
 
                 SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-                Sprite sprite = Resources.Load($"Crops/{cropType.name.ToLower()}_0{clampedIndex}", typeof(Sprite)) as Sprite;
+                Sprite sprite = Resources.Load(cropType.getSpritePath(clampedIndex), typeof(Sprite)) as Sprite;
                 spriteRenderer.sprite = sprite;
             }    
         });
         this.transform.localScale = new Vector2(5,5);
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 
-        Sprite sprite = Resources.Load($"Crops/{cropType.name.ToLower()}_01", typeof(Sprite)) as Sprite;
+        Sprite sprite = Resources.Load(cropType.getSpritePath(1), typeof(Sprite)) as Sprite;
         spriteRenderer.sprite = sprite;
     }
 
@@ -39,4 +39,5 @@ public class Crop : MonoBehaviour
     {
         
     }
+
 }

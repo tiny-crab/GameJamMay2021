@@ -5,7 +5,17 @@ public class CropType {
     public int buyPrice;
     public int sellPrice;
     public int turnsToHarvest;
-    public List<string> spritePaths;
+    public int spritePathCount;
+
+    public string getSpritePath(int index) {
+        if (index < 1) {
+            index = 1;
+        } else if (index > spritePathCount) {
+            index = spritePathCount;
+        }
+
+        return $"Crops/{name.ToLower()}_0{index}";
+    }
 }
 
 public static class CropTemplates {

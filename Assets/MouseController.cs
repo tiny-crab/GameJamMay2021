@@ -159,4 +159,8 @@ public class MouseController : MonoBehaviour
             validPlacement = dataStore.garden.checkShapeValidOnGarden(dataStore.heldShape, new Vector2(hitTile.x, hitTile.y));
         }
     }
+
+    public void holdShape() {
+        
+    }
 }
