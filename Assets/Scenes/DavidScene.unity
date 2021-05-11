@@ -325,6 +325,9 @@ MonoBehaviour:
   dataStore: {fileID: 1221782667}
   gardenTilePrefab: {fileID: 6401033417493587802, guid: dec385c6711c94a46aebaa0bda3ce616,
     type: 3}
+  heldCropPrefab: {fileID: 7638571439018138330, guid: f2137152d48cf4456b35c6cb87f6e032,
+    type: 3}
+  locallyHeldCrop: {fileID: 0}
 --- !u!4 &325843398
 Transform:
   m_ObjectHideFlags: 0
@@ -1627,72 +1630,3 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1661059208}
   m_CullTransparentMesh: 1
---- !u!1001 &1712330138506348902
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 129882423861677791, guid: f2137152d48cf4456b35c6cb87f6e032,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 129882423861677791, guid: f2137152d48cf4456b35c6cb87f6e032,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 288.1473
-      objectReference: {fileID: 0}
-    - target: {fileID: 129882423861677791, guid: f2137152d48cf4456b35c6cb87f6e032,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 214.87741
-      objectReference: {fileID: 0}
-    - target: {fileID: 129882423861677791, guid: f2137152d48cf4456b35c6cb87f6e032,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -34.106884
-      objectReference: {fileID: 0}
-    - target: {fileID: 129882423861677791, guid: f2137152d48cf4456b35c6cb87f6e032,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 129882423861677791, guid: f2137152d48cf4456b35c6cb87f6e032,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 129882423861677791, guid: f2137152d48cf4456b35c6cb87f6e032,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 129882423861677791, guid: f2137152d48cf4456b35c6cb87f6e032,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 129882423861677791, guid: f2137152d48cf4456b35c6cb87f6e032,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 129882423861677791, guid: f2137152d48cf4456b35c6cb87f6e032,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 129882423861677791, guid: f2137152d48cf4456b35c6cb87f6e032,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7638571439018138330, guid: f2137152d48cf4456b35c6cb87f6e032,
-        type: 3}
-      propertyPath: m_Name
-      value: HeldCrop
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: f2137152d48cf4456b35c6cb87f6e032, type: 3}
