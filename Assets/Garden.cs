@@ -77,9 +77,9 @@ public class Garden : MonoBehaviour
                     GameObject crop = (GameObject) Object.Instantiate(cropPrefab, tile.transform.position, Quaternion.identity, tile.transform);
                     crop.transform.position = new Vector3(crop.transform.position.x, crop.transform.position.y, -5);
                     Crop cropClass = crop.GetComponent<Crop>();
-                    cropClass.cropType = CropTemplates.Potato;
+                    cropClass.cropType = tet.cropType;
                     tile.crop = cropClass;
-                    tile.GetComponent<SpriteRenderer>().color = Color.yellow;
+                    //tile.GetComponent<SpriteRenderer>().color = Color.yellow;
                 }
             }
         }

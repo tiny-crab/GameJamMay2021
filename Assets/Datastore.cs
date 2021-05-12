@@ -14,7 +14,12 @@ public class Datastore : MonoBehaviour
 
     public Garden garden;
 
+    public MouseController mouseController;
+
     public Tetromino heldShape;
+    public Crop heldCrop;
+
+    public IntReactiveProperty mouseState = new IntReactiveProperty(0);
 
     public Dictionary<string, Color> colors = new Dictionary<string, Color>() {
         {"GREEN", new Color(125/255f, 197/255f, 94/255f)}, {"DARK_GREEN", new Color(121/255f, 191/255f, 92/255f)},
