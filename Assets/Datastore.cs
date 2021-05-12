@@ -28,6 +28,7 @@ public class Datastore : MonoBehaviour
     };
 
     public IntReactiveProperty turnCount = new IntReactiveProperty(0);
+    public IntReactiveProperty countdown = new IntReactiveProperty(0);
 
 
     /*
