@@ -629,6 +629,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orderPrefab: {fileID: 0}
+  customerPrefab: {fileID: 0}
+  datastore: {fileID: 1221782667}
 --- !u!4 &942622482
 Transform:
   m_ObjectHideFlags: 0
@@ -674,6 +676,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gardenGrid: []
   garden: {fileID: 0}
+  mouseController: {fileID: 0}
+  heldCrop: {fileID: 0}
+  mouseState:
+    value: 0
   turnCount:
     value: 0
 --- !u!4 &1221782668
