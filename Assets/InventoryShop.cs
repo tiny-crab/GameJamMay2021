@@ -22,16 +22,16 @@ public class InventoryShop : MonoBehaviour
 
     void clickShopCard(GameObject cropCard, CropType crop) {
         if (cropCard == selectedCard.Value) {
-            if (datastore.money.Value >= crop.buyPrice) {
+            // if (datastore.money.Value >= crop.buyPrice) {
                 if (datastore.seedInventory.Keys.Contains(crop)) {
                     var currentCount = datastore.seedInventory[crop].Value;
                     datastore.seedInventory[crop].SetValueAndForceNotify(currentCount + 1);
                 } else {
                     datastore.seedInventory[crop] = new IntReactiveProperty(1);
                 }
-                datastore.money.Value -= crop.buyPrice;
+                //datastore.money.Value -= crop.buyPrice;
                 Debug.Log($"Purchased {crop.name} for total {datastore.seedInventory[crop].Value} seeds.");
-            }
+            // }
         }
         else {
             selectedCard.SetValueAndForceNotify(cropCard);
@@ -40,14 +40,14 @@ public class InventoryShop : MonoBehaviour
     }
 
     void clickInventoryCard(GameObject cropCard, CropType cropType) {
-        if (datastore.seedInventory.Keys.Contains(cropType)) {
-            var currentCount = datastore.seedInventory[cropType].Value;
-            if (currentCount > 0) {
+        // if (datastore.seedInventory.Keys.Contains(cropType)) {
+        //     var currentCount = datastore.seedInventory[cropType].Value;
+        //     if (currentCount > 0) {
                 selectedCard.SetValueAndForceNotify(cropCard);
                 datastore.mouseController.holdShape(cropType);
                 datastore.mouseState.Value = (int) MouseState.PLANTING;
-            }
-        }
+        //     }
+        // }
     }
 
     void fillInventory() {

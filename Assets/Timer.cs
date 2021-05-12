@@ -26,7 +26,7 @@ public class Timer : MonoBehaviour
 
         tick.Subscribe(_ => {
             if (datastore.countdown.Value == 0) {
-                datastore.countdown.SetValueAndForceNotify(10);
+                datastore.countdown.SetValueAndForceNotify(datastore.turnLength.Value);
             } else {
                 datastore.countdown.Value--;
             }
@@ -48,7 +48,8 @@ public class Timer : MonoBehaviour
     }
 
     void endTurn() {
+        Debug.Log("NewTurn");
         datastore.turnCount.Value++;
-        datastore.countdown.Value = 10;
+        datastore.countdown.Value = datastore.turnLength.Value;
     }
 }

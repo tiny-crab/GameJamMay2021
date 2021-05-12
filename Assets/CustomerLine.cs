@@ -71,7 +71,7 @@ public class CustomerLine : MonoBehaviour
         datastore.storage[order.crop].Value -= 1;
         order.orderButton.Children().First().assignSpriteFromPath("UISprites/confirm");
         order.completed = true;
-        datastore.money.Value += order.crop.sellPrice;
+        //datastore.money.Value += order.crop.sellPrice;
     }
 
     void endTurn() {
