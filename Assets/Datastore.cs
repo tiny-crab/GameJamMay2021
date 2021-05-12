@@ -6,6 +6,13 @@ using System.Linq;
 
 public class Datastore : MonoBehaviour
 {
+
+    void Start() {
+        for (int i = 0; i < CropTemplates.cropTypes.Count; i++) {
+            storage[CropTemplates.cropTypes[i]] = new IntReactiveProperty(0);
+        }
+    }
+
     public Dictionary<CropType, IntReactiveProperty> seedInventory = new Dictionary<CropType, IntReactiveProperty>();
     public List<CropType> storeInventory = CropTemplates.cropTypes;
 
@@ -47,6 +54,7 @@ public class Datastore : MonoBehaviour
         public GameObject orderButton;
         public CropType crop;
         public bool completed;
+        public int turnsWillingToWait;
     }
 
     public List<KeyValuePair<GameObject, List<Order>>> customers = new List<KeyValuePair<GameObject, List<Order>>>();

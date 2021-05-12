@@ -12,7 +12,7 @@ public class CropType {
     private Random random;
 
     public CropType() {
-        random = new Random();
+        random = new Random((int) DateTimeOffset.Now.ToUnixTimeMilliseconds());
         shuffleShapeType();
     }
     

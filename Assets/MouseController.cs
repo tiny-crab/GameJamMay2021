@@ -138,14 +138,15 @@ public class MouseController : MonoBehaviour
             }
         } else if (dataStore.mouseState.Value == (int) MouseState.HOLDING) {
             if (Input.GetMouseButtonDown(0)) {
-                Destroy(locallyHeldCrop);
-                dataStore.heldCrop.setAlpha(1f);
-                dataStore.heldCrop = null;
                 RaycastHit2D rayHit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity, 1 << 7);
                 if (rayHit.collider != null) {
                     hitTile.harvest();
-                    // Add to storage of farmstand
+                    dataStore.storage[dataStore.heldCrop.cropType].Value += 1;
+                    Debug.Log($"CropType{dataStore.heldCrop.cropType.name}, StorageCount: {dataStore.storage[dataStore.heldCrop.cropType].Value}");
                 }
+                Destroy(locallyHeldCrop);
+                dataStore.heldCrop.setAlpha(1f);
+                dataStore.heldCrop = null;
                 dataStore.mouseState.Value = (int) MouseState.DEFAULT;
             }
         }
