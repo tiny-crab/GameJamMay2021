@@ -20,10 +20,12 @@ public class CustomerLine : MonoBehaviour
         customerPrefab = Resources.Load<GameObject>("Prefabs/Customer");
 
         clickStream.Subscribe(_ => {
-            RaycastHit2D rayHit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity);
-            // this is a really gross way to detect if we hit an order button 🤮
-            if (rayHit.collider != null && rayHit.collider.GetComponentInParent<CustomerLine>() != null) {
-                clickOrder(rayHit.collider.gameObject);
+            if (datastore.mouseState.Value == (int) MouseState.DEFAULT) {
+                RaycastHit2D rayHit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity);
+                // this is a really gross way to detect if we hit an order button 🤮
+                if (rayHit.collider != null && rayHit.collider.GetComponentInParent<CustomerLine>() != null) {
+                    clickOrder(rayHit.collider.gameObject);
+                }
             }
         });
 
@@ -51,6 +53,7 @@ public class CustomerLine : MonoBehaviour
             orderList.Add(new Datastore.Order() {
                 orderButton = order,
                 crop = randomCropType,
+                turnsWillingToWait = 3
             });
         }
 
@@ -59,25 +62,29 @@ public class CustomerLine : MonoBehaviour
 
     void clickOrder(GameObject orderButton) {
         var orderMatch = datastore.customers.First().Value.FindAll(obj => obj.orderButton == orderButton);
-        if (orderMatch.Count == 1) {
+        if (orderMatch.Count == 1 && datastore.storage[orderMatch[0].crop].Value > 0) {
             fulfillOrder(orderMatch.Single());
         }
     }
 
     void fulfillOrder(Datastore.Order order) {
+        datastore.storage[order.crop].Value -= 1;
         order.orderButton.Children().First().assignSpriteFromPath("UISprites/confirm");
         order.completed = true;
-        datastore.money.Value += order.crop.sellPrice;
+        //datastore.money.Value += order.crop.sellPrice;
     }
 
     void endTurn() {
-        if (datastore.customers.First().Value.All(order => order.completed)) {
+        bool allOrdersCompleted = datastore.customers.First().Value.All(order => order.completed);
+        bool waitedTooLong = datastore.customers.First().Value.First().turnsWillingToWait <= 0;
+        if (allOrdersCompleted || waitedTooLong) {
             datastore.customers.First().Value.ForEach(order => GameObject.Destroy(order.orderButton));
             GameObject.Destroy(datastore.customers.First().Key);
             datastore.customers.RemoveAt(0);
             shiftCustomers();
             generateCustomer();
         }
+        datastore.customers.First().Value.First().turnsWillingToWait--;
     }
 
     void shiftCustomers() {

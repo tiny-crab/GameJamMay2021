@@ -6,10 +6,18 @@ using System.Linq;
 
 public class Datastore : MonoBehaviour
 {
+
+    void Start() {
+        for (int i = 0; i < CropTemplates.cropTypes.Count; i++) {
+            storage[CropTemplates.cropTypes[i]] = new IntReactiveProperty(0);
+            seedInventory[CropTemplates.cropTypes[i]] = new IntReactiveProperty(0);
+        }
+    }
+
     public Dictionary<CropType, IntReactiveProperty> seedInventory = new Dictionary<CropType, IntReactiveProperty>();
     public List<CropType> storeInventory = CropTemplates.cropTypes;
 
-    public IntReactiveProperty money = new IntReactiveProperty(10);
+    //public IntReactiveProperty money = new IntReactiveProperty(10);
 
     public List<GameObject> gardenGrid;
 
@@ -20,6 +28,8 @@ public class Datastore : MonoBehaviour
     public Tetromino heldShape;
     public Crop heldCrop;
 
+    public Dictionary<CropType, IntReactiveProperty> storage = new Dictionary<CropType, IntReactiveProperty>();
+
     public IntReactiveProperty mouseState = new IntReactiveProperty(0);
 
     public Dictionary<string, Color> colors = new Dictionary<string, Color>() {
@@ -29,6 +39,8 @@ public class Datastore : MonoBehaviour
 
     public IntReactiveProperty turnCount = new IntReactiveProperty(0);
     public IntReactiveProperty countdown = new IntReactiveProperty(0);
+
+    public IntReactiveProperty turnLength = new IntReactiveProperty(10);
 
 
     /*
@@ -45,6 +57,7 @@ public class Datastore : MonoBehaviour
         public GameObject orderButton;
         public CropType crop;
         public bool completed;
+        public int turnsWillingToWait;
     }
 
     public List<KeyValuePair<GameObject, List<Order>>> customers = new List<KeyValuePair<GameObject, List<Order>>>();

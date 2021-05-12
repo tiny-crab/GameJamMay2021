@@ -56,6 +56,8 @@ public class MouseController : MonoBehaviour
 
         if (Input.GetKeyDown("w")) {
             dataStore.turnCount.Value++;
+            dataStore.countdown.Value = dataStore.turnLength.Value;
+            Debug.Log("NewTurn");
         }
 
         if (dataStore.mouseState.Value == (int) MouseState.PLANTING) {
@@ -138,10 +140,30 @@ public class MouseController : MonoBehaviour
             }
         } else if (dataStore.mouseState.Value == (int) MouseState.HOLDING) {
             if (Input.GetMouseButtonDown(0)) {
+                RaycastHit2D rayHit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity, 1 << 7);
+                if (rayHit.collider != null) {
+                    hitTile.harvest();
+                    dataStore.storage[dataStore.heldCrop.cropType].Value += 1;
+                    Debug.Log($"CropType{dataStore.heldCrop.cropType.name}, StorageCount: {dataStore.storage[dataStore.heldCrop.cropType].Value}");
+                }
                 Destroy(locallyHeldCrop);
                 dataStore.heldCrop.setAlpha(1f);
                 dataStore.heldCrop = null;
                 dataStore.mouseState.Value = (int) MouseState.DEFAULT;
+            }
+
+            if (Input.GetMouseButtonUp(0)) {
+                RaycastHit2D rayHit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity, 1 << 7);
+                if (rayHit.collider != null) {
+                    hitTile.harvest();
+                    dataStore.storage[dataStore.heldCrop.cropType].Value += 1;
+                    Debug.Log($"CropType{dataStore.heldCrop.cropType.name}, StorageCount: {dataStore.storage[dataStore.heldCrop.cropType].Value}");
+
+                    Destroy(locallyHeldCrop);
+                    dataStore.heldCrop = null;
+
+                    dataStore.mouseState.Value = (int) MouseState.DEFAULT;
+                }
             }
         }
     }
