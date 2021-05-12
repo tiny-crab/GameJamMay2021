@@ -7,9 +7,9 @@ using System.Linq;
 public class Datastore : MonoBehaviour
 {
     public Dictionary<CropType, IntReactiveProperty> seedInventory = new Dictionary<CropType, IntReactiveProperty>();
-    public List<CropType> storeInventory = new List<CropType>() {
-        CropTemplates.Radish, CropTemplates.Potato
-    };
+    public List<CropType> storeInventory = CropTemplates.cropTypes;
+
+    public IntReactiveProperty money = new IntReactiveProperty(10);
 
     public List<GameObject> gardenGrid;
 

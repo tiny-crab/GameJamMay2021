@@ -67,6 +67,7 @@ public class CustomerLine : MonoBehaviour
     void fulfillOrder(Datastore.Order order) {
         order.orderButton.Children().First().assignSpriteFromPath("UISprites/confirm");
         order.completed = true;
+        datastore.money.Value += order.crop.sellPrice;
     }
 
     void endTurn() {
