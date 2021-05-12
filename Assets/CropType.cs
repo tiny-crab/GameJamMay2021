@@ -43,7 +43,7 @@ public static class CropTemplates {
     
     public static CropType Potato = new CropType() {
             name = "Potato",
-            turnsToHarvest = 4,
+            turnsToHarvest = 7,
             buyPrice = 4,
             sellPrice = 6,
             spritePathCount = 5

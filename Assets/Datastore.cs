@@ -19,6 +19,8 @@ public class Datastore : MonoBehaviour
     public Tetromino heldShape;
     public Crop heldCrop;
 
+    public Dictionary<CropType, IntReactiveProperty> storage = new Dictionary<CropType, IntReactiveProperty>();
+
     public IntReactiveProperty mouseState = new IntReactiveProperty(0);
 
     public Dictionary<string, Color> colors = new Dictionary<string, Color>() {

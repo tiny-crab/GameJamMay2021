@@ -11,20 +11,23 @@ public class Crop : MonoBehaviour
     public CropType cropType;
     public bool isMature = false;
 
+    private IDisposable turnSubscription;
+
     void Start() {
         dataStore = GameObject.Find("Datastore").GetComponent<Datastore>();
         turnPlanted = dataStore.turnCount.Value;
-        dataStore.turnCount.Subscribe(currentTurn => {
+        turnSubscription = dataStore.turnCount.Subscribe(currentTurn => {
             int turnsAlive = currentTurn - turnPlanted;
             if (turnsAlive > 0) {
                 int turnsUntilMature = cropType.turnsToHarvest - turnsAlive;
                 if (turnsUntilMature <= 0) {
                     isMature = true;
                 }
-                float percentageComplete = ((float) turnsUntilMature) / ((float) cropType.turnsToHarvest);
-                int invertedIndex = Convert.ToInt32(Math.Floor(cropType.spritePathCount * percentageComplete));
-                int index = cropType.spritePathCount - invertedIndex;
+                float percentageComplete = 1f - ((float) turnsUntilMature) / ((float) cropType.turnsToHarvest);
+                float floater = ((float) cropType.spritePathCount) * percentageComplete;
+                int index = Convert.ToInt32(Math.Floor(((float) cropType.spritePathCount) * percentageComplete));
                 int clampedIndex = Math.Min(index, cropType.spritePathCount);
+                // Debug.Log($"Percent{percentageComplete}, floater: {floater}, index: {clampedIndex}");
 
                 SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
                 Sprite sprite = Resources.Load(cropType.getSpritePath(clampedIndex), typeof(Sprite)) as Sprite;
@@ -49,5 +52,11 @@ public class Crop : MonoBehaviour
     {
         
     }
+
+    void OnDestroy()
+    {
+        turnSubscription.Dispose();
+    }
+
 
 }
