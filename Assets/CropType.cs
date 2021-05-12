@@ -1,38 +1,130 @@
 using System.Collections.Generic;
+using System;
+using UniRx;
 
 public class CropType {
     public string name;
     public int buyPrice;
     public int sellPrice;
     public int turnsToHarvest;
-    public List<string> spritePaths;
+    public int spritePathCount;
+    public IntReactiveProperty shapeType = new IntReactiveProperty();
+    private Random random;
+
+    public CropType() {
+        random = new Random();
+        shuffleShapeType();
+    }
+    
+    // If we want to persist the shapetype of the order as they are purchased we can keep a list of them and add them to the end
+    // as they are bought and remove them from the front as they are planted.
+    public void shuffleShapeType() {
+        shapeType.Value = (int) getRandomShapeType();
+    }
+
+    public string getSpritePath(int index) {
+        if (index < 1) {
+            index = 1;
+        } else if (index > spritePathCount) {
+            index = spritePathCount;
+        }
+
+        return $"Crops/{name.ToLower()}_0{index}";
+    }
+
+    //Putting this here for a sec becuase Unity refuses to let any form of random exist in any sort of static context, directly or indiretly, and its being a huge fucking bitch about it
+    private List<ShapeType> shapeTypes = new List<ShapeType>() { ShapeType.T, ShapeType.O, ShapeType.L, ShapeType.I, ShapeType.S, ShapeType.Z, ShapeType.J };
+    private ShapeType getRandomShapeType() {
+        return (ShapeType) shapeTypes[random.Next(0, shapeTypes.Count)];
+    }
 }
 
 public static class CropTemplates {
-    public static CropType Radish = new CropType() {
-            name = "Radish",
-            turnsToHarvest = 3,
-            buyPrice = 6,
-            sellPrice = 10,
-            spritePaths = new List<string>() {
-                "Crops/potato_01",
-                "Crops/potato_02",
-                "Crops/potato_03",
-                "Crops/potato_04",
-                "Crops/potato_05",
-            }
-    };
+    
     public static CropType Potato = new CropType() {
             name = "Potato",
-            turnsToHarvest = 5,
-            buyPrice = 2,
-            sellPrice = 5,
-            spritePaths = new List<string>() {
-                "Crops/potato_01",
-                "Crops/potato_02",
-                "Crops/potato_03",
-                "Crops/potato_04",
-                "Crops/potato_05",
-            }
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+    public static CropType Radish = new CropType() {
+            name = "Radish",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+
+    public static CropType Pumpkin = new CropType() {
+            name = "Pumpkin",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+    public static CropType Beetroot = new CropType() {
+            name = "Beetroot",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+    public static CropType Cabbage = new CropType() {
+            name = "Cabbage",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+
+    public static CropType Carrot = new CropType() {
+            name = "Carrot",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+
+    public static CropType Cauliflower = new CropType() {
+            name = "Cauliflower",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+    public static CropType Kale = new CropType() {
+            name = "Kale",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+    public static CropType Parsnip = new CropType() {
+            name = "Parsnip",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+    public static CropType Wheat = new CropType() {
+            name = "Wheat",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+
+    public static CropType Sunflower = new CropType() {
+            name = "Sunflower",
+            turnsToHarvest = 4,
+            buyPrice = 4,
+            sellPrice = 6,
+            spritePathCount = 5
+    };
+
+    public static List<CropType> cropTypes = new List<CropType>() {
+        CropTemplates.Potato, CropTemplates.Radish, CropTemplates.Pumpkin, CropTemplates.Beetroot, CropTemplates.Cabbage,
+        CropTemplates.Carrot, CropTemplates.Cauliflower, CropTemplates.Kale, CropTemplates.Parsnip, CropTemplates.Wheat, CropTemplates.Sunflower
     };
 }
