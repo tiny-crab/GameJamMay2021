@@ -22,13 +22,16 @@ public class InventoryShop : MonoBehaviour
 
     void clickShopCard(GameObject cropCard, CropType crop) {
         if (cropCard == selectedCard.Value) {
-            if (datastore.seedInventory.Keys.Contains(crop)) {
-            var currentCount = datastore.seedInventory[crop].Value;
-            datastore.seedInventory[crop].SetValueAndForceNotify(currentCount + 1);
-            } else {
-                datastore.seedInventory[crop] = new IntReactiveProperty(1);
+            if (datastore.money.Value >= crop.buyPrice) {
+                if (datastore.seedInventory.Keys.Contains(crop)) {
+                    var currentCount = datastore.seedInventory[crop].Value;
+                    datastore.seedInventory[crop].SetValueAndForceNotify(currentCount + 1);
+                } else {
+                    datastore.seedInventory[crop] = new IntReactiveProperty(1);
+                }
+                datastore.money.Value -= crop.buyPrice;
+                Debug.Log($"Purchased {crop.name} for total {datastore.seedInventory[crop].Value} seeds.");
             }
-            Debug.Log($"Purchased {crop.name} for total {datastore.seedInventory[crop].Value} seeds.");
         }
         else {
             selectedCard.SetValueAndForceNotify(cropCard);
