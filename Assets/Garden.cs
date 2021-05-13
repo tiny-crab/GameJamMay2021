@@ -4,31 +4,44 @@ using UnityEngine;
 
 public class Garden : MonoBehaviour
 {
-    public Datastore dataStore;
+    public Datastore datastore;
     public GameObject gardenTilePrefab;
-    public GameObject cropPrefab;
     public int width;
     public int height;
+    public int tilledWidth;
+    public int tilledHeight;
 
     // Start is called before the first frame update
     void Start() {
-        cropPrefab = (GameObject) Resources.Load("Prefabs/Crop");
-        gardenTilePrefab = (GameObject) Resources.Load("Prefabs/GardenTile");
+        datastore = GameObject.Find("Datastore").GetComponent<Datastore>();
+        Debug.Log(datastore.prefabManager);
+        Debug.Log(datastore.prefabManager.cropPrefab);
+        gardenTilePrefab = datastore.prefabManager.gardenTilePrefab;
         for (var x = 0; x < width; x++) {
             for (var y = 0; y < height; y++) {
                 GameObject tile = (GameObject) Object.Instantiate(gardenTilePrefab, this.transform);
-                tile.GetComponent<GardenTile>().x = x;
-                tile.GetComponent<GardenTile>().y = y;
+                GardenTile gardenTile = tile.GetComponent<GardenTile>();
+                gardenTile.x = x;
+                gardenTile.y = y;
+                gardenTile.tilled = (x < tilledWidth && y < tilledHeight);
                 var spriteWidth = tile.GetComponent<SpriteRenderer>().bounds.size.x;
                 var spriteHeight = tile.GetComponent<SpriteRenderer>().bounds.size.y;
                 if ((x + y) % 2 == 0) {
-                    tile.GetComponent<SpriteRenderer>().color = dataStore.colors["DARK_GREEN"];
+                    if (gardenTile.tilled) {
+                        tile.GetComponent<SpriteRenderer>().color = datastore.colors["DARK_GROUND"];
+                    } else {
+                        tile.GetComponent<SpriteRenderer>().color = datastore.colors["DARK_GREEN"];
+                    }
                 } else {
-                    tile.GetComponent<SpriteRenderer>().color = dataStore.colors["GREEN"];
+                    if (gardenTile.tilled) {
+                        tile.GetComponent<SpriteRenderer>().color = datastore.colors["GROUND"];
+                    } else {
+                        tile.GetComponent<SpriteRenderer>().color = datastore.colors["GREEN"];
+                    }
                 }
-                tile.transform.position = new Vector2((x * spriteWidth) + dataStore.garden.transform.position.x, (y * spriteHeight) + dataStore.garden.transform.position.y);
+                tile.transform.position = new Vector2((x * spriteWidth) + datastore.garden.transform.position.x, (y * spriteHeight) + datastore.garden.transform.position.y);
                 tile.layer = 6;
-                dataStore.gardenGrid.Add(tile);
+                datastore.gardenGrid.Add(tile);
             }
         }
     }
@@ -44,11 +57,11 @@ public class Garden : MonoBehaviour
             bool foundTile = false;
             Vector2 tetRelativeCoordinate = tet.getCoordinates()[t];
             Vector2 mouseRelativeCoordinate = new Vector2(tetRelativeCoordinate.x + mouseCoords.x, tetRelativeCoordinate.y + mouseCoords.y);
-            for (int i = 0; i < dataStore.gardenGrid.Count; i++) {
-                GardenTile tile = dataStore.gardenGrid[i].GetComponent<GardenTile>();
+            for (int i = 0; i < datastore.gardenGrid.Count; i++) {
+                GardenTile tile = datastore.gardenGrid[i].GetComponent<GardenTile>();
                 if (tile.x == mouseRelativeCoordinate.x && tile.y == mouseRelativeCoordinate.y) {
                     foundTile = true;
-                    if (tile.crop != null) {
+                    if (tile.crop != null || !tile.tilled) {
                         return false;
                     } else {
                         if (t == tet.getCoordinates().Count - 1) {
@@ -70,10 +83,10 @@ public class Garden : MonoBehaviour
         for (int t = 0; t < tet.getCoordinates().Count; t++) {
             Vector2 tetRelativeCoordinate = tet.getCoordinates()[t];
             Vector2 mouseRelativeCoordinate = new Vector2(tetRelativeCoordinate.x + mouseCoords.x, tetRelativeCoordinate.y + mouseCoords.y);
-            for (int i = 0; i < dataStore.gardenGrid.Count; i++) {
-                GardenTile tile = dataStore.gardenGrid[i].GetComponent<GardenTile>();
+            for (int i = 0; i < datastore.gardenGrid.Count; i++) {
+                GardenTile tile = datastore.gardenGrid[i].GetComponent<GardenTile>();
                 if (tile.x == mouseRelativeCoordinate.x && tile.y == mouseRelativeCoordinate.y) {
-                    GameObject crop = (GameObject) Object.Instantiate(cropPrefab, tile.transform.position, Quaternion.identity, tile.transform);
+                    GameObject crop = (GameObject) Object.Instantiate(datastore.prefabManager.cropPrefab, tile.transform.position, Quaternion.identity, tile.transform);
                     crop.transform.position = new Vector3(crop.transform.position.x, crop.transform.position.y, -5);
                     Crop cropClass = crop.GetComponent<Crop>();
                     cropClass.cropType = tet.cropType;

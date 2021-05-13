@@ -6,7 +6,7 @@ using System;
 
 public class Crop : MonoBehaviour
 {
-    public Datastore dataStore;
+    public Datastore datastore;
     public int turnPlanted;
     public CropType cropType;
     public bool isMature = false;
@@ -15,9 +15,9 @@ public class Crop : MonoBehaviour
     private IDisposable turnSubscription;
 
     void Start() {
-        dataStore = GameObject.Find("Datastore").GetComponent<Datastore>();
-        turnPlanted = dataStore.turnCount.Value;
-        turnSubscription = dataStore.turnCount.Subscribe(currentTurn => {
+        datastore = GameObject.Find("Datastore").GetComponent<Datastore>();
+        turnPlanted = datastore.turnCount.Value;
+        turnSubscription = datastore.turnCount.Subscribe(currentTurn => {
             int turnsAlive = currentTurn - turnPlanted;
             if (turnsAlive > 0) {
                 int turnsUntilMature = cropType.turnsToHarvest - turnsAlive;
@@ -33,7 +33,7 @@ public class Crop : MonoBehaviour
                 //is not the same as their specified turn.
                 float delay = 0;
                 if (clampedIndex != cropType.spritePathCount) {
-                    int maxDelay = dataStore.turnLength.Value;
+                    int maxDelay = datastore.turnLength.Value;
                     delay = UnityEngine.Random.Range(0.0f, (float) maxDelay * 0.75f);
                 }
                 
@@ -42,7 +42,7 @@ public class Crop : MonoBehaviour
                     setSpriteByIndex(indexFromLastTurn);
                     runningCoroutine = false;
                 }
-                spriteChangeCoroutine = setSpriteAfterDelay(delay, clampedIndex, dataStore.turnCount.Value);
+                spriteChangeCoroutine = setSpriteAfterDelay(delay, clampedIndex, datastore.turnCount.Value);
                 StartCoroutine(spriteChangeCoroutine);
             }    
         });
@@ -71,7 +71,7 @@ public class Crop : MonoBehaviour
 
         yield return new WaitForSeconds(delay);
 
-        if (desiredTurn != dataStore.turnCount.Value) {
+        if (desiredTurn != datastore.turnCount.Value) {
             yield break;
         }
 
