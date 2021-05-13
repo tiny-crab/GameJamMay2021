@@ -26,8 +26,6 @@ public class MouseController : MonoBehaviour
                 dropShape();
             } else if (state == (int) MouseState.PLANTING) {
 
-            } else if (state == (int) MouseState.HOLDING) {
-
             }
         });
     }
@@ -35,18 +33,6 @@ public class MouseController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("d")) {
-            dataStore.mouseState.Value = (int) MouseState.DEFAULT;
-        }
-
-        if (Input.GetKeyDown("s")) {
-            dataStore.mouseState.Value = (int) MouseState.PLANTING;
-        }
-
-        // if (Input.GetKeyDown("space")) {
-        //     getNewShape();
-        // }
-
         if (Input.GetKeyDown("r")) {
             dataStore.heldShape.rotate();
             if (hitTile != null) {
@@ -70,7 +56,6 @@ public class MouseController : MonoBehaviour
                 GardenTile newTile = rayHit.collider.GetComponent<GardenTile>();
                 if (hitTile == null || hitTile.x != newTile.x || hitTile.y != newTile.y) {
                     validPlacement = dataStore.garden.checkShapeValidOnGarden(dataStore.heldShape, new Vector2(newTile.x, newTile.y));
-                    //Debug.Log("Valid?:" + validPlacement);
                     hitTile = newTile;
                     newTileHit = true;
                 }
@@ -104,7 +89,7 @@ public class MouseController : MonoBehaviour
             }
             
             if (Input.GetMouseButtonDown(0)) {
-                    plantSeeds();
+                plantSeeds();
             }
         } else if (dataStore.mouseState.Value == (int) MouseState.DEFAULT) {
 
@@ -124,46 +109,10 @@ public class MouseController : MonoBehaviour
                 if (hitTile != null) {
                     Crop grabbedCrop = hitTile.grab();
                     if (grabbedCrop != null) {
-                        dataStore.heldCrop = grabbedCrop;
-                        dataStore.heldCrop.setAlpha(0.5f);
-
-                        locallyHeldCrop = Object.Instantiate(heldCropPrefab, Input.mousePosition, Quaternion.identity);
-                        SpriteRenderer spriteRenderer = locallyHeldCrop.GetComponent<SpriteRenderer>();
-                        Sprite sprite = Resources.Load(dataStore.heldCrop.cropType.getSpritePath(dataStore.heldCrop.cropType.spritePathCount), typeof(Sprite)) as Sprite;
-                        spriteRenderer.sprite = sprite;
-                        locallyHeldCrop.transform.localScale = new Vector2(5,5);
-                        spriteRenderer.sortingOrder = 10;
-
-                        dataStore.mouseState.Value = (int) MouseState.HOLDING;
+                        hitTile.harvest();
+                        dataStore.storage[grabbedCrop.cropType].Value += 1;
                     }
                 }        
-            }
-        } else if (dataStore.mouseState.Value == (int) MouseState.HOLDING) {
-            if (Input.GetMouseButtonDown(0)) {
-                RaycastHit2D rayHit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity, 1 << 7);
-                if (rayHit.collider != null) {
-                    hitTile.harvest();
-                    dataStore.storage[dataStore.heldCrop.cropType].Value += 1;
-                    Debug.Log($"CropType{dataStore.heldCrop.cropType.name}, StorageCount: {dataStore.storage[dataStore.heldCrop.cropType].Value}");
-                }
-                Destroy(locallyHeldCrop);
-                dataStore.heldCrop.setAlpha(1f);
-                dataStore.heldCrop = null;
-                dataStore.mouseState.Value = (int) MouseState.DEFAULT;
-            }
-
-            if (Input.GetMouseButtonUp(0)) {
-                RaycastHit2D rayHit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity, 1 << 7);
-                if (rayHit.collider != null) {
-                    hitTile.harvest();
-                    dataStore.storage[dataStore.heldCrop.cropType].Value += 1;
-                    Debug.Log($"CropType{dataStore.heldCrop.cropType.name}, StorageCount: {dataStore.storage[dataStore.heldCrop.cropType].Value}");
-
-                    Destroy(locallyHeldCrop);
-                    dataStore.heldCrop = null;
-
-                    dataStore.mouseState.Value = (int) MouseState.DEFAULT;
-                }
             }
         }
     }
@@ -172,6 +121,7 @@ public class MouseController : MonoBehaviour
         for (int i = 0; i < this.heldShapeTiles.Count; i++) {
             Destroy(this.heldShapeTiles[i]);
         }
+        this.heldShapeTiles.Clear();
         dataStore.heldShape = null;
         this.hitTile = null;
     }

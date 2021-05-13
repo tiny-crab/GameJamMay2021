@@ -16,8 +16,6 @@ public class GardenTile : MonoBehaviour {
     }
 
     public void harvest() {
-        Debug.Log("Destroying Crop");
-        Destroy(crop.GetComponent<Crop>());
         Destroy(crop.gameObject);
         crop = null;
     }

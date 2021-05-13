@@ -83,8 +83,9 @@ public class CustomerLine : MonoBehaviour
             datastore.customers.RemoveAt(0);
             shiftCustomers();
             generateCustomer();
+        } else {
+            datastore.customers.First().Value.First().turnsWillingToWait--;
         }
-        datastore.customers.First().Value.First().turnsWillingToWait--;
     }
 
     void shiftCustomers() {

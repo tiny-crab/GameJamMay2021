@@ -5,7 +5,6 @@ using UnityEngine;
 public class Garden : MonoBehaviour
 {
     public Datastore dataStore;
-
     public GameObject gardenTilePrefab;
     public GameObject cropPrefab;
     public int width;
@@ -27,7 +26,6 @@ public class Garden : MonoBehaviour
                 } else {
                     tile.GetComponent<SpriteRenderer>().color = dataStore.colors["GREEN"];
                 }
-                //tile.GetComponent<SpriteRenderer>().sprite = Resources.Load("Assets/Sprites/SUNNYSIDE_WORLD_CROPS_V0.01/ASSETS/soil_01.png", typeOf(Sprite));
                 tile.transform.position = new Vector2((x * spriteWidth) + dataStore.garden.transform.position.x, (y * spriteHeight) + dataStore.garden.transform.position.y);
                 tile.layer = 6;
                 dataStore.gardenGrid.Add(tile);
@@ -60,6 +58,7 @@ public class Garden : MonoBehaviour
                     }
                 }
             }
+            //Tile wasn't found at all and coordinates do not exist on grid
             if (!foundTile) {
                 return false;
             }
@@ -79,7 +78,6 @@ public class Garden : MonoBehaviour
                     Crop cropClass = crop.GetComponent<Crop>();
                     cropClass.cropType = tet.cropType;
                     tile.crop = cropClass;
-                    //tile.GetComponent<SpriteRenderer>().color = Color.yellow;
                 }
             }
         }
