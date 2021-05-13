@@ -16,8 +16,9 @@ public class CustomerLine : MonoBehaviour
 
     // Start is called before the first frame update
     void Start() {
-        orderPrefab = Resources.Load<GameObject>("Prefabs/Order");
-        customerPrefab = Resources.Load<GameObject>("Prefabs/Customer");
+        datastore = GameObject.Find("Datastore").GetComponent<Datastore>();
+        orderPrefab = datastore.prefabManager.orderPrefab;
+        customerPrefab = datastore.prefabManager.customerPrefab;
 
         clickStream.Subscribe(_ => {
             if (datastore.mouseState.Value == (int) MouseState.DEFAULT) {

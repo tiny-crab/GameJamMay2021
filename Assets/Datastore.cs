@@ -7,12 +7,17 @@ using System.Linq;
 public class Datastore : MonoBehaviour
 {
 
-    void Start() {
+    void Awake() {
+        prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
+        garden = GameObject.Find("Garden").GetComponent<Garden>();
+        mouseController = GameObject.Find("MouseController").GetComponent<MouseController>();
         for (int i = 0; i < CropTemplates.cropTypes.Count; i++) {
             storage[CropTemplates.cropTypes[i]] = new IntReactiveProperty(0);
             seedInventory[CropTemplates.cropTypes[i]] = new IntReactiveProperty(0);
         }
     }
+
+    public PrefabManager prefabManager;
 
     public Dictionary<CropType, IntReactiveProperty> seedInventory = new Dictionary<CropType, IntReactiveProperty>();
     public List<CropType> storeInventory = CropTemplates.cropTypes;
@@ -31,7 +36,8 @@ public class Datastore : MonoBehaviour
 
     public Dictionary<string, Color> colors = new Dictionary<string, Color>() {
         {"GREEN", new Color(125/255f, 197/255f, 94/255f)}, {"DARK_GREEN", new Color(121/255f, 191/255f, 92/255f)},
-        {"GROUND", new Color(218/255f, 169/255f, 122/255f)}, {"WATER", new Color(67/255f, 151/255f, 213/255f)}
+        {"GROUND", new Color(218/255f, 169/255f, 122/255f)}, {"WATER", new Color(67/255f, 151/255f, 213/255f)},
+        {"DARK_GROUND", new Color(185/255f, 136/255f, 109/255f)}
     };
 
     public IntReactiveProperty turnCount = new IntReactiveProperty(0);

@@ -5,7 +5,7 @@ using UniRx;
 
 public class MouseController : MonoBehaviour
 {
-    public Datastore dataStore;
+    public Datastore datastore;
 
     public GameObject gardenTilePrefab;
     public GameObject heldCropPrefab;
@@ -21,7 +21,8 @@ public class MouseController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        dataStore.mouseState.Subscribe(state => {
+        datastore = GameObject.Find("Datastore").GetComponent<Datastore>();
+        datastore.mouseState.Subscribe(state => {
             if (state == (int) MouseState.DEFAULT) {
                 dropShape();
             } else if (state == (int) MouseState.PLANTING) {
@@ -34,19 +35,19 @@ public class MouseController : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown("r")) {
-            dataStore.heldShape.rotate();
+            datastore.heldShape.rotate();
             if (hitTile != null) {
-                validPlacement = dataStore.garden.checkShapeValidOnGarden(dataStore.heldShape, new Vector2(hitTile.x, hitTile.y));
+                validPlacement = datastore.garden.checkShapeValidOnGarden(datastore.heldShape, new Vector2(hitTile.x, hitTile.y));
             }
         }
 
         if (Input.GetKeyDown("w")) {
-            dataStore.turnCount.Value++;
-            dataStore.countdown.Value = dataStore.turnLength.Value;
+            datastore.turnCount.Value++;
+            datastore.countdown.Value = datastore.turnLength.Value;
             Debug.Log("NewTurn");
         }
 
-        if (dataStore.mouseState.Value == (int) MouseState.PLANTING) {
+        if (datastore.mouseState.Value == (int) MouseState.PLANTING) {
             bool newTileHit = false;
 
             //Detect if mouse is hovering over a gardenTile
@@ -55,7 +56,7 @@ public class MouseController : MonoBehaviour
                 //Debug.Log("Hit Garden Tile");
                 GardenTile newTile = rayHit.collider.GetComponent<GardenTile>();
                 if (hitTile == null || hitTile.x != newTile.x || hitTile.y != newTile.y) {
-                    validPlacement = dataStore.garden.checkShapeValidOnGarden(dataStore.heldShape, new Vector2(newTile.x, newTile.y));
+                    validPlacement = datastore.garden.checkShapeValidOnGarden(datastore.heldShape, new Vector2(newTile.x, newTile.y));
                     hitTile = newTile;
                     newTileHit = true;
                 }
@@ -66,12 +67,12 @@ public class MouseController : MonoBehaviour
 
             //Set position of held Tetromino based on mouse position or hovered garden tile
             Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            for (int i = 0; i < dataStore.heldShape.getCoordinates().Count; i++) {
+            for (int i = 0; i < datastore.heldShape.getCoordinates().Count; i++) {
                 GameObject tile = this.heldShapeTiles[i];
                 var spriteWidth = tile.GetComponent<SpriteRenderer>().bounds.size.x;
                 var spriteHeight = tile.GetComponent<SpriteRenderer>().bounds.size.y;
                 GardenTile gardenTile = tile.GetComponent<GardenTile>();
-                Vector2 coordinate = dataStore.heldShape.getCoordinates()[i];
+                Vector2 coordinate = datastore.heldShape.getCoordinates()[i];
                 Vector2 center;
                 if (hitTile != null) {
                     center = hitTile.transform.position;
@@ -91,7 +92,7 @@ public class MouseController : MonoBehaviour
             if (Input.GetMouseButtonDown(0)) {
                 plantSeeds();
             }
-        } else if (dataStore.mouseState.Value == (int) MouseState.DEFAULT) {
+        } else if (datastore.mouseState.Value == (int) MouseState.DEFAULT) {
 
             //Detect if mouse is hovering over a gardenTile
             RaycastHit2D rayHit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity, 1 << 6);
@@ -110,7 +111,7 @@ public class MouseController : MonoBehaviour
                     Crop grabbedCrop = hitTile.grab();
                     if (grabbedCrop != null) {
                         hitTile.harvest();
-                        dataStore.storage[grabbedCrop.cropType].Value += 1;
+                        datastore.storage[grabbedCrop.cropType].Value += 1;
                     }
                 }        
             }
@@ -122,7 +123,7 @@ public class MouseController : MonoBehaviour
             Destroy(this.heldShapeTiles[i]);
         }
         this.heldShapeTiles.Clear();
-        dataStore.heldShape = null;
+        datastore.heldShape = null;
         this.hitTile = null;
     }
 
@@ -132,9 +133,9 @@ public class MouseController : MonoBehaviour
         }
         this.heldShapeTiles.Clear();
 
-        dataStore.heldShape = TetrominoTemplates.createShapeWithCropType((ShapeType) cropType.shapeType.Value, cropType);
+        datastore.heldShape = TetrominoTemplates.createShapeWithCropType((ShapeType) cropType.shapeType.Value, cropType);
 
-        for (int i = 0; i < dataStore.heldShape.getCoordinates().Count; i++) {
+        for (int i = 0; i < datastore.heldShape.getCoordinates().Count; i++) {
             GameObject tile = Object.Instantiate(gardenTilePrefab, this.transform);
             heldShapeTiles.Add(tile);
         }
@@ -142,20 +143,20 @@ public class MouseController : MonoBehaviour
 
     public void plantSeeds() {
         if (validPlacement) {
-            dataStore.garden.placeTiles(dataStore.heldShape, new Vector2(hitTile.x, hitTile.y));
-            int currentCount = dataStore.seedInventory[dataStore.heldShape.cropType].Value;
-            dataStore.seedInventory[dataStore.heldShape.cropType].SetValueAndForceNotify(currentCount - 1);
-            dataStore.heldShape.cropType.shuffleShapeType();
+            datastore.garden.placeTiles(datastore.heldShape, new Vector2(hitTile.x, hitTile.y));
+            int currentCount = datastore.seedInventory[datastore.heldShape.cropType].Value;
+            datastore.seedInventory[datastore.heldShape.cropType].SetValueAndForceNotify(currentCount - 1);
+            datastore.heldShape.cropType.shuffleShapeType();
             hitTile = null;
-            dataStore.heldShape = null;
+            datastore.heldShape = null;
             for (int i = 0; i < this.heldShapeTiles.Count; i++) {
                 Destroy(this.heldShapeTiles[i]);
             } 
             this.heldShapeTiles.Clear();
-            dataStore.mouseState.Value = (int) MouseState.DEFAULT;
+            datastore.mouseState.Value = (int) MouseState.DEFAULT;
         } else if (!validPlacement && hitTile == null) {
             dropShape();
-            dataStore.mouseState.Value = (int) MouseState.DEFAULT;
+            datastore.mouseState.Value = (int) MouseState.DEFAULT;
         } else {
             // Play invalid placement beeping sound
         }

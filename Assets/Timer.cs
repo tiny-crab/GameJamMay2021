@@ -11,6 +11,7 @@ public class Timer : MonoBehaviour
 
     // Start is called before the first frame update
     void Start() {
+        datastore = GameObject.Find("Datastore").GetComponent<Datastore>();
         var timerPanel = GameObject.Find("TimerPanel");
         timerPanel.GetComponent<RectTransform>().anchorMin = new Vector2(1,1);
         timerPanel.GetComponent<RectTransform>().anchorMax = new Vector2(1,1);

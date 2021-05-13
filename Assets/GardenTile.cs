@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class GardenTile : MonoBehaviour {
     public Crop crop;
+    public bool tilled;
     public int x;
     public int y;
+
+    void Start() {
+
+    }
 
     public Crop grab() {
         if (crop != null && crop.isMature) {
@@ -18,5 +23,9 @@ public class GardenTile : MonoBehaviour {
     public void harvest() {
         Destroy(crop.gameObject);
         crop = null;
+    }
+
+    public void till() {
+
     }
 }

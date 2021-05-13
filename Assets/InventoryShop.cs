@@ -49,6 +49,8 @@ public class InventoryShop : MonoBehaviour
     }
 
     void Start() {
+        datastore = GameObject.Find("Datastore").GetComponent<Datastore>();
+        cropInventoryCardPrefab = datastore.prefabManager.cropInventoryCardPrefab;
         fillInventory();
     }
 }
