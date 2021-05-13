@@ -10,6 +10,7 @@ public class PrefabManager : MonoBehaviour
     public GameObject gardenTilePrefab;
     public GameObject cropInventoryCardPrefab;
     public GameObject timePanelPrefab;
+    public GameObject tilledSoilPrefab;
 
     // Start is called before the first frame update
     void Awake()
@@ -20,6 +21,7 @@ public class PrefabManager : MonoBehaviour
         gardenTilePrefab = Resources.Load<GameObject>("Prefabs/GardenTile");
         cropInventoryCardPrefab = Resources.Load<GameObject>("Prefabs/UI/CropInventoryCard");
         timePanelPrefab = Resources.Load<GameObject>("Prefabs/UI/TimePanel");
+        tilledSoilPrefab = Resources.Load<GameObject>("Prefabs/TilledSoil");
     }
 
     // Update is called once per frame

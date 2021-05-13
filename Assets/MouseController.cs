@@ -27,6 +27,8 @@ public class MouseController : MonoBehaviour
                 dropShape();
             } else if (state == (int) MouseState.PLANTING) {
 
+            } else if (state == (int) MouseState.TILLING) {
+                dropShape();
             }
         });
     }
@@ -34,6 +36,10 @@ public class MouseController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown("t")) {
+            datastore.mouseState.Value = (int) MouseState.TILLING;
+        }
+
         if (Input.GetKeyDown("r")) {
             datastore.heldShape.rotate();
             if (hitTile != null) {
@@ -114,6 +120,22 @@ public class MouseController : MonoBehaviour
                         datastore.storage[grabbedCrop.cropType].Value += 1;
                     }
                 }        
+            }
+        } else if (datastore.mouseState.Value == (int) MouseState.TILLING) {
+            if (Input.GetMouseButtonDown(0)) {
+                RaycastHit2D rayHit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity, 1 << 6);
+                if (rayHit.collider != null && rayHit.collider.GetComponent<GardenTile>() != null) {
+                    GardenTile tile = rayHit.collider.GetComponent<GardenTile>();
+                    if (datastore.tillCount.Value > 0 && !tile.tilled) {
+                        tile.till();
+                        datastore.tillCount.Value -= 1;
+                    }
+                } else {
+                    datastore.mouseState.Value = (int) MouseState.DEFAULT;
+                }
+                if (datastore.tillCount.Value == 0) {
+                    datastore.mouseState.Value = (int) MouseState.DEFAULT;
+                }
             }
         }
     }
