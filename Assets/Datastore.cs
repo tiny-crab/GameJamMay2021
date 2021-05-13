@@ -11,6 +11,7 @@ public class Datastore : MonoBehaviour
         prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
         garden = GameObject.Find("Garden").GetComponent<Garden>();
         mouseController = GameObject.Find("MouseController").GetComponent<MouseController>();
+        hoverInfo = GameObject.Find("HoverInfo").GetComponent<HoverInfo>();
     }
 
     void Start() {
@@ -32,6 +33,8 @@ public class Datastore : MonoBehaviour
     public MouseController mouseController;
 
     public Tetromino heldShape;
+
+    public HoverInfo hoverInfo;
 
     public Dictionary<CropType, IntReactiveProperty> storage = new Dictionary<CropType, IntReactiveProperty>();
 

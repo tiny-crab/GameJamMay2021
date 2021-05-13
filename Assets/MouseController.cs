@@ -6,11 +6,9 @@ using UniRx;
 public class MouseController : MonoBehaviour
 {
     public Datastore datastore;
-
     public GameObject gardenTilePrefab;
     public GameObject heldCropPrefab;
 
-    
     private List<GameObject> heldShapeTiles = new List<GameObject>();
     private GardenTile hitTile;
     private bool validPlacement;
@@ -23,6 +21,7 @@ public class MouseController : MonoBehaviour
     {
         datastore = GameObject.Find("Datastore").GetComponent<Datastore>();
         datastore.mouseState.Subscribe(state => {
+            datastore.hoverInfo.setHoveredObject(null);
             if (state == (int) MouseState.DEFAULT) {
                 dropShape();
             } else if (state == (int) MouseState.PLANTING) {
@@ -106,8 +105,10 @@ public class MouseController : MonoBehaviour
                 GardenTile newTile = rayHit.collider.GetComponent<GardenTile>();
                 if (hitTile == null || hitTile.x != newTile.x || hitTile.y != newTile.y) {
                     hitTile = newTile;
+                    datastore.hoverInfo.setHoveredObject(hitTile.gameObject);
                 }
             } else {
+                datastore.hoverInfo.setHoveredObject(null);
                 hitTile = null;
                 validPlacement = false;
             }
