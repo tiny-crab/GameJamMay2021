@@ -11,6 +11,9 @@ public class Datastore : MonoBehaviour
         prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
         garden = GameObject.Find("Garden").GetComponent<Garden>();
         mouseController = GameObject.Find("MouseController").GetComponent<MouseController>();
+    }
+
+    void Start() {
         for (int i = 0; i < CropTemplates.cropTypes.Count; i++) {
             storage[CropTemplates.cropTypes[i]] = new IntReactiveProperty(0);
             seedInventory[CropTemplates.cropTypes[i]] = new IntReactiveProperty(0);
@@ -33,6 +36,8 @@ public class Datastore : MonoBehaviour
     public Dictionary<CropType, IntReactiveProperty> storage = new Dictionary<CropType, IntReactiveProperty>();
 
     public IntReactiveProperty mouseState = new IntReactiveProperty(0);
+
+    public IntReactiveProperty tillCount = new IntReactiveProperty(10);
 
     public Dictionary<string, Color> colors = new Dictionary<string, Color>() {
         {"GREEN", new Color(125/255f, 197/255f, 94/255f)}, {"DARK_GREEN", new Color(121/255f, 191/255f, 92/255f)},

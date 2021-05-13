@@ -23,7 +23,10 @@ public class Garden : MonoBehaviour
                 GardenTile gardenTile = tile.GetComponent<GardenTile>();
                 gardenTile.x = x;
                 gardenTile.y = y;
-                gardenTile.tilled = (x < tilledWidth && y < tilledHeight);
+                if (x < tilledWidth && y < tilledHeight) {
+                    gardenTile.till();
+                }
+
                 var spriteWidth = tile.GetComponent<SpriteRenderer>().bounds.size.x;
                 var spriteHeight = tile.GetComponent<SpriteRenderer>().bounds.size.y;
                 if ((x + y) % 2 == 0) {
@@ -88,6 +91,7 @@ public class Garden : MonoBehaviour
                 if (tile.x == mouseRelativeCoordinate.x && tile.y == mouseRelativeCoordinate.y) {
                     GameObject crop = (GameObject) Object.Instantiate(datastore.prefabManager.cropPrefab, tile.transform.position, Quaternion.identity, tile.transform);
                     crop.transform.position = new Vector3(crop.transform.position.x, crop.transform.position.y, -5);
+                    crop.GetComponent<SpriteRenderer>().sortingOrder = 10;
                     Crop cropClass = crop.GetComponent<Crop>();
                     cropClass.cropType = tet.cropType;
                     tile.crop = cropClass;
