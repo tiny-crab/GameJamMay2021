@@ -5,21 +5,15 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    public Canvas canvas;
-    public GameObject timerPanelPrefab;
-
     public Datastore datastore;
 
     public UniRx.IObservable<long> tick = Observable.Interval(TimeSpan.FromSeconds(1)).AsObservable();
 
     // Start is called before the first frame update
     void Start() {
-        canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-        timerPanelPrefab = Resources.Load<GameObject>("Prefabs/UI/TimerPanel");
-
-        var timerPanel = GameObject.Instantiate(timerPanelPrefab, canvas.transform);
-        timerPanel.GetComponent<RectTransform>().anchorMin = new Vector2(1,0);
-        timerPanel.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
+        var timerPanel = GameObject.Find("TimerPanel");
+        timerPanel.GetComponent<RectTransform>().anchorMin = new Vector2(1,1);
+        timerPanel.GetComponent<RectTransform>().anchorMax = new Vector2(1,1);
 
         var advanceButton = (Button) timerPanel.transform.Find("AdvanceButton").GetComponent<Button>();
         advanceButton.onClick.AddListener(endTurn);
