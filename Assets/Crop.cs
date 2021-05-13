@@ -10,6 +10,7 @@ public class Crop : MonoBehaviour
     public int turnPlanted;
     public CropType cropType;
     public bool isMature = false;
+    public int turnsUntilMature;
     private bool runningCoroutine = false;
     private IEnumerator spriteChangeCoroutine = null;
     private IDisposable turnSubscription;
@@ -20,7 +21,7 @@ public class Crop : MonoBehaviour
         turnSubscription = datastore.turnCount.Subscribe(currentTurn => {
             int turnsAlive = currentTurn - turnPlanted;
             if (turnsAlive > 0) {
-                int turnsUntilMature = cropType.turnsToHarvest - turnsAlive;
+                turnsUntilMature = cropType.turnsToHarvest - turnsAlive;
                 if (turnsUntilMature <= 0) {
                     isMature = true;
                 }
@@ -51,6 +52,8 @@ public class Crop : MonoBehaviour
 
         Sprite sprite = Resources.Load(cropType.getSpritePath(1), typeof(Sprite)) as Sprite;
         spriteRenderer.sprite = sprite;
+
+        turnsUntilMature = cropType.turnsToHarvest;
     }
 
     private int getIndexForSpriteByTurnsUntilMature(int turnsUntilMature) {
