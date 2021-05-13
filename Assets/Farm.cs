@@ -14,7 +14,6 @@ public class Farm : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        // dataStore.SeedInventory["Tomatoes"] = 1;
-        // var tomato = CropTemplates.Tomato;
+
     }
 }

@@ -17,8 +17,6 @@ public class Datastore : MonoBehaviour
     public Dictionary<CropType, IntReactiveProperty> seedInventory = new Dictionary<CropType, IntReactiveProperty>();
     public List<CropType> storeInventory = CropTemplates.cropTypes;
 
-    //public IntReactiveProperty money = new IntReactiveProperty(10);
-
     public List<GameObject> gardenGrid;
 
     public Garden garden;
@@ -26,7 +24,6 @@ public class Datastore : MonoBehaviour
     public MouseController mouseController;
 
     public Tetromino heldShape;
-    public Crop heldCrop;
 
     public Dictionary<CropType, IntReactiveProperty> storage = new Dictionary<CropType, IntReactiveProperty>();
 
@@ -39,7 +36,6 @@ public class Datastore : MonoBehaviour
 
     public IntReactiveProperty turnCount = new IntReactiveProperty(0);
     public IntReactiveProperty countdown = new IntReactiveProperty(0);
-
     public IntReactiveProperty turnLength = new IntReactiveProperty(10);
 
 
