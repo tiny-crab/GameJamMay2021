@@ -34,7 +34,13 @@ public class CustomerLine : MonoBehaviour
             generateCustomer();
         }
 
-        datastore.turnCount.Subscribe(_ => endTurn());
+        datastore.turnCount.Subscribe(value => {
+            if (value % 12 == 0 && value != 0) {
+                datastore.possibleCrops.Add(CropTemplates.cropTypes.Except(datastore.possibleCrops).getRandomElement());
+                datastore.newCropNotifier.Value++;
+            }
+            endTurn();
+        });
     }
 
     void generateCustomer() {
@@ -48,7 +54,7 @@ public class CustomerLine : MonoBehaviour
         for (var i = 0; i < numOrders; i++) {
             var order = GameObject.Instantiate(orderPrefab, origin + new Vector3(1 + .75f * i, -lineOffset, 0), Quaternion.identity, this.transform);
 
-            var randomCropType = CropTemplates.cropTypes.getRandomElement();
+            var randomCropType = datastore.possibleCrops.getRandomElement();
             order.Children().First().assignSpriteFromPath(randomCropType.getSpritePath(randomCropType.spritePathCount));
 
             orderList.Add(new Datastore.Order() {

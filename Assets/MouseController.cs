@@ -13,7 +13,7 @@ public class MouseController : MonoBehaviour
     private GardenTile hitTile;
     private bool validPlacement;
     public GameObject locallyHeldCrop;
-    
+
 
 
     // Start is called before the first frame update
@@ -93,7 +93,7 @@ public class MouseController : MonoBehaviour
                     tile.transform.position = new Vector2((coordinate.x * spriteWidth) + center.x, (coordinate.y * spriteHeight) + center.y);
                 }
             }
-            
+
             if (Input.GetMouseButtonDown(0)) {
                 plantSeeds();
             }
@@ -120,7 +120,7 @@ public class MouseController : MonoBehaviour
                         hitTile.harvest();
                         datastore.storage[grabbedCrop.cropType].Value += 1;
                     }
-                }        
+                }
             }
         } else if (datastore.mouseState.Value == (int) MouseState.TILLING) {
             if (Input.GetMouseButtonDown(0)) {
@@ -167,14 +167,12 @@ public class MouseController : MonoBehaviour
     public void plantSeeds() {
         if (validPlacement) {
             datastore.garden.placeTiles(datastore.heldShape, new Vector2(hitTile.x, hitTile.y));
-            int currentCount = datastore.seedInventory[datastore.heldShape.cropType].Value;
-            datastore.seedInventory[datastore.heldShape.cropType].SetValueAndForceNotify(currentCount - 1);
             datastore.heldShape.cropType.shuffleShapeType();
             hitTile = null;
             datastore.heldShape = null;
             for (int i = 0; i < this.heldShapeTiles.Count; i++) {
                 Destroy(this.heldShapeTiles[i]);
-            } 
+            }
             this.heldShapeTiles.Clear();
             datastore.mouseState.Value = (int) MouseState.DEFAULT;
         } else if (!validPlacement && hitTile == null) {
@@ -184,6 +182,6 @@ public class MouseController : MonoBehaviour
             // Play invalid placement beeping sound
         }
 
-        
+
     }
 }

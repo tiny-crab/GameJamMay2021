@@ -17,14 +17,14 @@ public class Datastore : MonoBehaviour
     void Start() {
         for (int i = 0; i < CropTemplates.cropTypes.Count; i++) {
             storage[CropTemplates.cropTypes[i]] = new IntReactiveProperty(0);
-            seedInventory[CropTemplates.cropTypes[i]] = new IntReactiveProperty(0);
         }
     }
 
     public PrefabManager prefabManager;
 
-    public Dictionary<CropType, IntReactiveProperty> seedInventory = new Dictionary<CropType, IntReactiveProperty>();
-    public List<CropType> storeInventory = CropTemplates.cropTypes;
+    public List<CropType> possibleCrops = CropTemplates.cropTypes.getManyRandomElements(2);
+    // the value here is agnostic - we just want to use it to notify things that rely on new inventory being added to the store
+    public IntReactiveProperty newCropNotifier = new IntReactiveProperty(0);
 
     public List<GameObject> gardenGrid;
 
