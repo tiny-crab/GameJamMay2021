@@ -12,6 +12,7 @@ public class Datastore : MonoBehaviour
         garden = GameObject.Find("Garden").GetComponent<Garden>();
         mouseController = GameObject.Find("MouseController").GetComponent<MouseController>();
         hoverInfo = GameObject.Find("HoverInfo").GetComponent<HoverInfo>();
+        farmStand = GameObject.Find("FarmStand");
     }
 
     void Start() {
@@ -31,6 +32,8 @@ public class Datastore : MonoBehaviour
     public Garden garden;
 
     public MouseController mouseController;
+
+    public GameObject farmStand;
 
     public Tetromino heldShape;
 

@@ -38,6 +38,7 @@ public class CustomerLine : MonoBehaviour
             if (value % 12 == 0 && value != 0) {
                 datastore.possibleCrops.Add(CropTemplates.cropTypes.Except(datastore.possibleCrops).getRandomElement());
                 datastore.newCropNotifier.Value++;
+                datastore.tillCount.Value += 3;
             }
             endTurn();
         });

@@ -36,13 +36,31 @@ public class InventoryShop : MonoBehaviour
                 });
 
                 var selectedIndicators = cropCard.transform.Find("SelectedIndicators").gameObject.Children();
-                selectedIndicators.ForEach(indicator => indicator.SetActive(false));
-                selectedCard.Subscribe(selectedCard => {
-                    selectedIndicators.ForEach(indicator => indicator.SetActive(selectedCard == cropCard));
-                });
+                // selectedIndicators.ForEach(indicator => indicator.SetActive(false));
+                // selectedCard.Subscribe(selectedCard => {
+                //     selectedIndicators.ForEach(indicator => indicator.SetActive(selectedCard == cropCard));
+                // });
 
                 var button = cropCard.GetComponentInChildren<Button>();
                 button.onClick.AddListener(() => clickInventoryCard(cropCard, entry));
+        });
+    }
+
+    private void createTillingCard() {
+        GameObject canvas = GameObject.Find("Canvas");
+        GameObject tillingCard = GameObject.Instantiate(datastore.prefabManager.tillingCard, canvas.transform);
+        tillingCard.transform.position = new Vector3(445, 200, 0);
+        var button = tillingCard.GetComponentInChildren<Button>();
+        button.onClick.AddListener(() => {
+            if (datastore.tillCount.Value > 0) {
+                datastore.mouseState.Value = (int) MouseState.TILLING;
+            }
+        });
+
+        tillingCard.transform.localScale = new Vector3(.5f, .5f, 1);
+        
+        datastore.tillCount.Subscribe(newCount => {
+            tillingCard.transform.Find("TillingCount").GetComponent<Text>().text = $"{newCount}";
         });
     }
 
@@ -50,5 +68,6 @@ public class InventoryShop : MonoBehaviour
         datastore = GameObject.Find("Datastore").GetComponent<Datastore>();
         cropInventoryCardPrefab = datastore.prefabManager.cropInventoryCardPrefab;
         datastore.newCropNotifier.Subscribe(_ => fillInventory());
+        createTillingCard();
     }
 }
