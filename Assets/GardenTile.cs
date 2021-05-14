@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class GardenTile : MonoBehaviour {
@@ -25,11 +26,15 @@ public class GardenTile : MonoBehaviour {
     }
 
     public void harvest() {
-        Destroy(crop.gameObject);
-        crop = null;
-        if (tilledSoil != null) {
-            tilledSoil.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Crops/soil_04");
-        }
+        datastore.storage[crop.cropType].Value += 1;
+        Tween tween = DOTween.To(()=> crop.gameObject.transform.position, x=> crop.gameObject.transform.position = x, datastore.farmStand.transform.position, 0.3f)
+        .OnComplete(() => {
+            Destroy(crop.gameObject);
+            crop = null;
+        });
+        tween.Play();
+        // crop.transform.DOScaleX(0.5f, 0.3f);
+        // crop.transform.DOScaleY(0.5f, 0.3f);
     }
 
     public void till() {

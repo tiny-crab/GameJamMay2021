@@ -14,6 +14,8 @@ public class MouseController : MonoBehaviour
     private bool validPlacement;
     public GameObject locallyHeldCrop;
 
+    public Texture2D pickaxeTexture;
+
 
 
     // Start is called before the first frame update
@@ -24,12 +26,18 @@ public class MouseController : MonoBehaviour
             datastore.hoverInfo.setHoveredObject(null);
             if (state == (int) MouseState.DEFAULT) {
                 dropShape();
+                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             } else if (state == (int) MouseState.PLANTING) {
-
+                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             } else if (state == (int) MouseState.TILLING) {
                 dropShape();
+                Cursor.SetCursor(pickaxeTexture, Vector2.zero, CursorMode.Auto);
             }
         });
+
+        pickaxeTexture = Resources.Load<Texture2D>("UISprites/pickaxe");
+        // pickaxeTexture.Resize(pickaxeTexture.width * 2, pickaxeTexture.height * 2);
+        // pickaxeTexture.Apply();
     }
 
     // Update is called once per frame
@@ -118,7 +126,6 @@ public class MouseController : MonoBehaviour
                     Crop grabbedCrop = hitTile.grab();
                     if (grabbedCrop != null) {
                         hitTile.harvest();
-                        datastore.storage[grabbedCrop.cropType].Value += 1;
                     }
                 }
             }
@@ -181,7 +188,6 @@ public class MouseController : MonoBehaviour
         } else {
             // Play invalid placement beeping sound
         }
-
-
     }
+
 }
