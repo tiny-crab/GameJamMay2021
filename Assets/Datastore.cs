@@ -32,6 +32,7 @@ public class Datastore : MonoBehaviour
     public Garden garden;
 
     public MouseController mouseController;
+    public InventoryShop inventoryShop;
 
     public GameObject farmStand;
 
@@ -73,5 +74,8 @@ public class Datastore : MonoBehaviour
         public int turnsWillingToWait;
     }
 
+    public IntReactiveProperty ordersFulfilled;
+    public IntReactiveProperty customersSatisfied;
+    public IntReactiveProperty customersFrustrated;
     public List<KeyValuePair<GameObject, List<Order>>> customers = new List<KeyValuePair<GameObject, List<Order>>>();
 }

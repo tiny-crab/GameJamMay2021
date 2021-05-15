@@ -43,6 +43,24 @@ public class Sound : MonoBehaviour
     public int whipMinInterval = 180;
     public int whipMaxInterval = 1000;
 
+    public List<AudioClip> clickClips = new List<AudioClip>();
+    public AudioSource clickSource;
+
+    public List<AudioClip> dropClips = new List<AudioClip>();
+    public AudioSource dropSource;
+
+    public List<AudioClip> happyClips = new List<AudioClip>();
+    public AudioSource happySource;
+
+    public List<AudioClip> digClips = new List<AudioClip>();
+    public AudioSource digSource;
+
+    public List<AudioClip> switchClips = new List<AudioClip>();
+    public AudioSource switchSource;
+
+    public List<AudioClip> mouseClips = new List<AudioClip>();
+    public AudioSource mouseSource;
+
     System.Random random = new System.Random();
     UniRx.IObservable<long> tick = Observable.Interval(TimeSpan.FromSeconds(1)).AsObservable();
 
@@ -76,6 +94,13 @@ public class Sound : MonoBehaviour
 
         (ambienceSource, ambienceClips) = loadClips(1, "SFX/ambience_fixloop_");
 
+        (clickSource, clickClips) = loadClips(2, "SFX/UI/click", "D1", 1);
+        (digSource, digClips) = loadClips(5, "SFX/impact/footstep_snow_", "D3", 0);
+        (happySource, happyClips) = loadClips(1, "SFX/UI/confirmation_", "D3", 3);
+        (dropSource, dropClips) = loadClips(3, "SFX/UI/drop_", "D3", 2);
+        (switchSource, switchClips) = loadClips(1, "SFX/UI/switch", "D1", 1);
+        (mouseSource, mouseClips) = loadClips(2, "SFX/UI/mouseclick", "D1", 1);
+
         ambienceSource.gameObject.name = "Ambience source";
         ambienceSource.volume = 0.2f;
         ambienceSource.clip = ambienceClips.Single();
@@ -96,6 +121,41 @@ public class Sound : MonoBehaviour
                 pianoSource.Play();
             }
         });
+
+        datastore.turnCount.Subscribe(_ => {
+            switchSource.clip = switchClips.getRandomElement();
+            switchSource.Play();
+        });
+
+        datastore.ordersFulfilled.Subscribe(_ => {
+            clickSource.clip = clickClips.getRandomElement();
+            clickSource.Play();
+        });
+
+        datastore.customersSatisfied.Subscribe(_ => {
+            happySource.clip = happyClips.getRandomElement();
+            happySource.Play();
+        });
+
+        datastore.mouseController.plantedSeeds.Subscribe(_ => {
+            clickSource.clip = clickClips.getRandomElement();
+            clickSource.Play();
+        });
+
+        datastore.mouseController.harvestedCrops.Subscribe(_ => {
+            dropSource.clip = dropClips.getRandomElement();
+            dropSource.Play();
+        });
+
+        datastore.mouseController.tilledSoil.Subscribe(_ => {
+            digSource.clip = digClips.getRandomElement();
+            digSource.Play();
+        });
+
+        datastore.inventoryShop.cardClicked.Subscribe(value => {
+            mouseSource.clip = mouseClips.getRandomElement();
+            mouseSource.Play();
+        });
     }
 
     void playClipAtRandomInterval(AudioSource source, List<AudioClip> clips, ref int secondsRemaining, int minInterval, int maxInterval) {
@@ -109,12 +169,12 @@ public class Sound : MonoBehaviour
         }
     }
 
-    (AudioSource, List<AudioClip>) loadClips(int numClips, string pathPrefix, string numSuffixLength="D2") {
+    (AudioSource, List<AudioClip>) loadClips(int numClips, string pathPrefix, string numSuffixLength="D2", int startIndex=1) {
         var clips = new List<AudioClip>();
         var source = new GameObject();
         source.transform.parent = this.transform;
         source.AddComponent<AudioSource>();
-        for (var i = 1; i <= numClips; i++) {
+        for (var i = startIndex; i < startIndex + numClips; i++) {
             clips.Add(Resources.Load<AudioClip>($"{pathPrefix}{i.ToString(numSuffixLength)}"));
         }
         return (source.GetComponent<AudioSource>(), clips);

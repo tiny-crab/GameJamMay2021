@@ -568,6 +568,7 @@ MonoBehaviour:
   timePanelPrefab: {fileID: 0}
   tilledSoilPrefab: {fileID: 0}
   backgroundTile: {fileID: 0}
+  tillingCard: {fileID: 0}
 --- !u!4 &273217374
 Transform:
   m_ObjectHideFlags: 0
@@ -617,6 +618,13 @@ MonoBehaviour:
   heldCropPrefab: {fileID: 7638571439018138330, guid: f2137152d48cf4456b35c6cb87f6e032,
     type: 3}
   locallyHeldCrop: {fileID: 0}
+  pickaxeTexture: {fileID: 0}
+  plantedSeeds:
+    value: 0
+  harvestedCrops:
+    value: 0
+  tilledSoil:
+    value: 0
 --- !u!4 &325843398
 Transform:
   m_ObjectHideFlags: 0
@@ -897,6 +905,16 @@ MonoBehaviour:
   secondsTilNextWhip: 0
   whipMinInterval: 180
   whipMaxInterval: 1000
+  clickClips: []
+  clickSource: {fileID: 0}
+  dropClips: []
+  dropSource: {fileID: 0}
+  happyClips: []
+  happySource: {fileID: 0}
+  digClips: []
+  digSource: {fileID: 0}
+  switchClips: []
+  switchSource: {fileID: 0}
   datastore: {fileID: 0}
 --- !u!4 &645207217
 Transform:
@@ -1208,6 +1226,8 @@ MonoBehaviour:
   gardenGrid: []
   garden: {fileID: 156343445}
   mouseController: {fileID: 325843397}
+  inventoryShop: {fileID: 1244527538}
+  farmStand: {fileID: 0}
   hoverInfo: {fileID: 0}
   mouseState:
     value: 0
@@ -1219,6 +1239,12 @@ MonoBehaviour:
     value: 0
   turnLength:
     value: 10
+  ordersFulfilled:
+    value: 0
+  customersSatisfied:
+    value: 0
+  customersFrustrated:
+    value: 0
 --- !u!4 &1221782668
 Transform:
   m_ObjectHideFlags: 0
@@ -1265,8 +1291,8 @@ MonoBehaviour:
   datastore: {fileID: 0}
   cropInventoryCardPrefab: {fileID: 0}
   layoutGroupObject: {fileID: 2034583461}
-  selectedCard:
-    value: {fileID: 0}
+  cardClicked:
+    value: 0
 --- !u!4 &1244527539
 Transform:
   m_ObjectHideFlags: 0

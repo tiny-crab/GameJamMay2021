@@ -16,7 +16,9 @@ public class MouseController : MonoBehaviour
 
     public Texture2D pickaxeTexture;
 
-
+    public IntReactiveProperty plantedSeeds = new IntReactiveProperty(0);
+    public IntReactiveProperty harvestedCrops = new IntReactiveProperty(0);
+    public IntReactiveProperty tilledSoil = new IntReactiveProperty(0);
 
     // Start is called before the first frame update
     void Start()
@@ -52,12 +54,6 @@ public class MouseController : MonoBehaviour
             if (hitTile != null) {
                 validPlacement = datastore.garden.checkShapeValidOnGarden(datastore.heldShape, new Vector2(hitTile.x, hitTile.y));
             }
-        }
-
-        if (Input.GetKeyDown("w")) {
-            datastore.turnCount.Value++;
-            datastore.countdown.Value = datastore.turnLength.Value;
-            Debug.Log("NewTurn");
         }
 
         if (datastore.mouseState.Value == (int) MouseState.PLANTING) {
@@ -126,6 +122,7 @@ public class MouseController : MonoBehaviour
                     Crop grabbedCrop = hitTile.grab();
                     if (grabbedCrop != null) {
                         hitTile.harvest();
+                        harvestedCrops.Value++;
                     }
                 }
             }
@@ -137,6 +134,7 @@ public class MouseController : MonoBehaviour
                     if (datastore.tillCount.Value > 0 && !tile.tilled) {
                         tile.till();
                         datastore.tillCount.Value -= 1;
+                        tilledSoil.Value++;
                     }
                 } else {
                     datastore.mouseState.Value = (int) MouseState.DEFAULT;
@@ -182,6 +180,7 @@ public class MouseController : MonoBehaviour
             }
             this.heldShapeTiles.Clear();
             datastore.mouseState.Value = (int) MouseState.DEFAULT;
+            plantedSeeds.Value++;
         } else if (!validPlacement && hitTile == null) {
             dropShape();
             datastore.mouseState.Value = (int) MouseState.DEFAULT;
