@@ -43,9 +43,7 @@ public class InventoryShop : MonoBehaviour
     }
 
     private void createTillingCard() {
-        GameObject canvas = GameObject.Find("Canvas");
-        GameObject tillingCard = GameObject.Instantiate(datastore.prefabManager.tillingCard, canvas.transform);
-        tillingCard.transform.position = new Vector3(445, 200, 0);
+        GameObject tillingCard = GameObject.Find("TillingCard");
         var button = tillingCard.GetComponentInChildren<Button>();
         button.onClick.AddListener(() => {
             if (datastore.tillCount.Value > 0) {
