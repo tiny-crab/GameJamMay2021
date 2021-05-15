@@ -5,8 +5,6 @@ using UniRx;
 public class CropType {
     private static RandomShapeGenerator randomShapeGeneratorInstance;
     public string name;
-    public int buyPrice;
-    public int sellPrice;
     public int turnsToHarvest;
     public int spritePathCount;
     public IntReactiveProperty shapeType = new IntReactiveProperty();
@@ -16,7 +14,7 @@ public class CropType {
         random = new Random((int) DateTimeOffset.Now.ToUnixTimeMilliseconds());
         shuffleShapeType();
     }
-    
+
     // If we want to persist the shapetype of the order as they are purchased we can keep a list of them and add them to the end
     // as they are bought and remove them from the front as they are planted.
     public void shuffleShapeType() {
@@ -54,86 +52,64 @@ public class CropType {
 }
 
 public static class CropTemplates {
-    
+
     public static CropType Potato = new CropType() {
             name = "Potato",
-            turnsToHarvest = 7,
-            buyPrice = 4,
-            sellPrice = 6,
+            turnsToHarvest = 4,
             spritePathCount = 5
     };
     public static CropType Radish = new CropType() {
             name = "Radish",
-            turnsToHarvest = 4,
-            buyPrice = 4,
-            sellPrice = 6,
+            turnsToHarvest = 3,
             spritePathCount = 5
     };
 
     public static CropType Pumpkin = new CropType() {
             name = "Pumpkin",
-            turnsToHarvest = 4,
-            buyPrice = 4,
-            sellPrice = 6,
+            turnsToHarvest = 8,
             spritePathCount = 5
     };
     public static CropType Beetroot = new CropType() {
             name = "Beetroot",
-            turnsToHarvest = 4,
-            buyPrice = 4,
-            sellPrice = 6,
+            turnsToHarvest = 3,
             spritePathCount = 5
     };
     public static CropType Cabbage = new CropType() {
             name = "Cabbage",
-            turnsToHarvest = 4,
-            buyPrice = 4,
-            sellPrice = 6,
+            turnsToHarvest = 3,
             spritePathCount = 5
     };
 
     public static CropType Carrot = new CropType() {
             name = "Carrot",
-            turnsToHarvest = 4,
-            buyPrice = 4,
-            sellPrice = 6,
+            turnsToHarvest = 2,
             spritePathCount = 5
     };
 
     public static CropType Cauliflower = new CropType() {
             name = "Cauliflower",
-            turnsToHarvest = 4,
-            buyPrice = 4,
-            sellPrice = 6,
+            turnsToHarvest = 5,
             spritePathCount = 5
     };
     public static CropType Kale = new CropType() {
             name = "Kale",
-            turnsToHarvest = 4,
-            buyPrice = 4,
-            sellPrice = 6,
+            turnsToHarvest = 2,
             spritePathCount = 5
     };
     public static CropType Parsnip = new CropType() {
             name = "Parsnip",
             turnsToHarvest = 4,
-            buyPrice = 4,
-            sellPrice = 6,
             spritePathCount = 5
     };
     public static CropType Wheat = new CropType() {
             name = "Wheat",
-            turnsToHarvest = 4,
-            buyPrice = 4,
-            sellPrice = 6,
+            turnsToHarvest = 2,
             spritePathCount = 5
     };
 
     public static CropType Sunflower = new CropType() {
             name = "Sunflower",
-            turnsToHarvest = 4,
-            buyPrice = 4,
-            sellPrice = 6,
+            turnsToHarvest = 6,
             spritePathCount = 5
     };
 
