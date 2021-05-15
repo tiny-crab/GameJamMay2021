@@ -79,21 +79,27 @@ public class CustomerLine : MonoBehaviour
         datastore.storage[order.crop].Value -= 1;
         order.orderButton.Children().First().assignSpriteFromPath("UISprites/confirm");
         order.completed = true;
-        //datastore.money.Value += order.crop.sellPrice;
+        datastore.ordersFulfilled.Value++;
     }
 
     void endTurn() {
         bool allOrdersCompleted = datastore.customers.First().Value.All(order => order.completed);
         bool waitedTooLong = datastore.customers.First().Value.First().turnsWillingToWait <= 0;
         if (allOrdersCompleted || waitedTooLong) {
-            datastore.customers.First().Value.ForEach(order => GameObject.Destroy(order.orderButton));
-            GameObject.Destroy(datastore.customers.First().Key);
-            datastore.customers.RemoveAt(0);
-            shiftCustomers();
-            generateCustomer();
+            frontOfLineLeave();
+            if (allOrdersCompleted) datastore.customersSatisfied.Value++;
+            else if (waitedTooLong) datastore.customersFrustrated.Value++;
         } else {
             datastore.customers.First().Value.First().turnsWillingToWait--;
         }
+    }
+
+    void frontOfLineLeave() {
+        datastore.customers.First().Value.ForEach(order => GameObject.Destroy(order.orderButton));
+        GameObject.Destroy(datastore.customers.First().Key);
+        datastore.customers.RemoveAt(0);
+        shiftCustomers();
+        generateCustomer();
     }
 
     void shiftCustomers() {

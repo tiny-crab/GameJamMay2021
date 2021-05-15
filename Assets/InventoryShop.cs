@@ -13,12 +13,12 @@ public class InventoryShop : MonoBehaviour
     public GameObject layoutGroupObject;
 
     public Dictionary<CropType, GameObject> visibleCards = new Dictionary<CropType, GameObject>();
-    public ReactiveProperty<GameObject> selectedCard = new ReactiveProperty<GameObject>();
+    public BoolReactiveProperty cardClicked = new BoolReactiveProperty(true);
 
     void clickInventoryCard(GameObject cropCard, CropType cropType) {
-        selectedCard.SetValueAndForceNotify(cropCard);
         datastore.mouseController.holdShape(cropType);
         datastore.mouseState.Value = (int) MouseState.PLANTING;
+        cardClicked.Value = !cardClicked.Value;
     }
 
     void fillInventory() {
@@ -36,10 +36,6 @@ public class InventoryShop : MonoBehaviour
                 });
 
                 var selectedIndicators = cropCard.transform.Find("SelectedIndicators").gameObject.Children();
-                // selectedIndicators.ForEach(indicator => indicator.SetActive(false));
-                // selectedCard.Subscribe(selectedCard => {
-                //     selectedIndicators.ForEach(indicator => indicator.SetActive(selectedCard == cropCard));
-                // });
 
                 var button = cropCard.GetComponentInChildren<Button>();
                 button.onClick.AddListener(() => clickInventoryCard(cropCard, entry));
@@ -58,7 +54,7 @@ public class InventoryShop : MonoBehaviour
         });
 
         tillingCard.transform.localScale = new Vector3(.5f, .5f, 1);
-        
+
         datastore.tillCount.Subscribe(newCount => {
             tillingCard.transform.Find("TillingCount").GetComponent<Text>().text = $"{newCount}";
         });

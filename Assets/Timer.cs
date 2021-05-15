@@ -43,7 +43,6 @@ public class Timer : MonoBehaviour
     }
 
     void endTurn() {
-        Debug.Log("NewTurn");
         datastore.turnCount.Value++;
         datastore.countdown.Value = datastore.turnLength.Value;
     }
