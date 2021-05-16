@@ -13,6 +13,7 @@ public class Datastore : MonoBehaviour
         mouseController = GameObject.Find("MouseController").GetComponent<MouseController>();
         hoverInfo = GameObject.Find("HoverInfo").GetComponent<HoverInfo>();
         farmStand = GameObject.Find("FarmStand");
+        pauseMenu = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
     }
 
     void Start() {
@@ -22,10 +23,12 @@ public class Datastore : MonoBehaviour
     }
 
     public PrefabManager prefabManager;
+    public PauseMenu pauseMenu;
 
     public List<CropType> possibleCrops = CropTemplates.cropTypes.getManyRandomElements(2);
     // the value here is agnostic - we just want to use it to notify things that rely on new inventory being added to the store
     public IntReactiveProperty newCropNotifier = new IntReactiveProperty(0);
+    public ReactiveProperty<float> volumeSliderValue = new ReactiveProperty<float>(1f);
 
     public List<GameObject> gardenGrid;
 
@@ -53,7 +56,6 @@ public class Datastore : MonoBehaviour
     };
 
     public IntReactiveProperty turnCount = new IntReactiveProperty(0);
-    public IntReactiveProperty countdown = new IntReactiveProperty(0);
     public IntReactiveProperty turnLength = new IntReactiveProperty(10);
 
 

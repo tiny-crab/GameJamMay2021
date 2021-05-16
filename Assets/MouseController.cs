@@ -19,6 +19,7 @@ public class MouseController : MonoBehaviour
     public IntReactiveProperty plantedSeeds = new IntReactiveProperty(0);
     public IntReactiveProperty harvestedCrops = new IntReactiveProperty(0);
     public IntReactiveProperty tilledSoil = new IntReactiveProperty(0);
+    public IntReactiveProperty errorClick = new IntReactiveProperty(0);
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +44,10 @@ public class MouseController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            datastore.pauseMenu.paused.Value = !datastore.pauseMenu.paused.Value;
+        }
+
         if (Input.GetKeyDown("t")) {
             datastore.mouseState.Value = (int) MouseState.TILLING;
         }
@@ -60,7 +65,6 @@ public class MouseController : MonoBehaviour
             //Detect if mouse is hovering over a gardenTile
             RaycastHit2D rayHit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity, 1 << 6);
             if (rayHit.collider != null && rayHit.collider.GetComponent<GardenTile>() != null) {
-                //Debug.Log("Hit Garden Tile");
                 GardenTile newTile = rayHit.collider.GetComponent<GardenTile>();
                 if (hitTile == null || hitTile.x != newTile.x || hitTile.y != newTile.y) {
                     validPlacement = datastore.garden.checkShapeValidOnGarden(datastore.heldShape, new Vector2(newTile.x, newTile.y));
@@ -183,7 +187,7 @@ public class MouseController : MonoBehaviour
             dropShape();
             datastore.mouseState.Value = (int) MouseState.DEFAULT;
         } else {
-            // Play invalid placement beeping sound
+            errorClick.Value++;
         }
     }
 
