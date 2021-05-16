@@ -28,7 +28,7 @@ public class InventoryShop : MonoBehaviour
                 var cropCard = Object.Instantiate(cropInventoryCardPrefab, layoutGroupObject.transform);
 
                 visibleCards[entry] = cropCard;
-                cropCard.transform.localScale = new Vector3(.25f, .25f, 1);
+                cropCard.transform.localScale = new Vector3(.2f, .2f, 1);
                 cropCard.transform.Find("CropIcon").GetComponent<Image>().sprite = Resources.Load<Sprite>(entry.getSpritePath(entry.spritePathCount));
                 cropCard.transform.Find("DurationText").GetComponent<Text>().text = $"{entry.turnsToHarvest}";
                 entry.shapeType.Subscribe(shapeType => {
