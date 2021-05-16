@@ -22,13 +22,14 @@ public class Storage : MonoBehaviour
             .Children().Where(child => child.gameObject.name == "StorageScrollview").Single()
             .Descendants().Where(desc => desc.gameObject.name == "Content").Single();
 
+        fillStorage();
         datastore.mouseController.harvestedCrops.Subscribe(_ => fillStorage());
     }
 
     void fillStorage() {
         datastore.storage
             .Where(entry => !visibleCards.Keys.Contains(entry.Key))
-            .Where(entry => entry.Value.Value > 0).ToList()
+            .Where(entry => datastore.possibleCrops.Contains(entry.Key)).ToList()
             .ForEach(entry => {
                 var cropCard = GameObject.Instantiate(storageCardPrefab, layoutGroupObject.transform);
 
