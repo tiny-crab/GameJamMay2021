@@ -33,13 +33,13 @@ public class Garden : MonoBehaviour
                     if (gardenTile.tilled) {
                         tile.GetComponent<SpriteRenderer>().color = datastore.colors["DARK_GROUND"];
                     } else {
-                        tile.GetComponent<SpriteRenderer>().color = datastore.colors["DARK_GREEN"];
+                        tile.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
                     }
                 } else {
                     if (gardenTile.tilled) {
                         tile.GetComponent<SpriteRenderer>().color = datastore.colors["GROUND"];
                     } else {
-                        tile.GetComponent<SpriteRenderer>().color = datastore.colors["GREEN"];
+                        tile.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
                     }
                 }
                 tile.transform.position = new Vector2((x * spriteWidth) + datastore.garden.transform.position.x, (y * spriteHeight) + datastore.garden.transform.position.y);
@@ -52,7 +52,7 @@ public class Garden : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public bool checkShapeValidOnGarden(Tetromino tet, Vector2 mouseCoords) {

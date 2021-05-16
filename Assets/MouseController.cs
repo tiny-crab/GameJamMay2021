@@ -38,8 +38,6 @@ public class MouseController : MonoBehaviour
         });
 
         pickaxeTexture = Resources.Load<Texture2D>("UISprites/pickaxe");
-        // pickaxeTexture.Resize(pickaxeTexture.width * 2, pickaxeTexture.height * 2);
-        // pickaxeTexture.Apply();
     }
 
     // Update is called once per frame
