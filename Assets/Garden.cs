@@ -14,8 +14,6 @@ public class Garden : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         datastore = GameObject.Find("Datastore").GetComponent<Datastore>();
-        Debug.Log(datastore.prefabManager);
-        Debug.Log(datastore.prefabManager.cropPrefab);
         gardenTilePrefab = datastore.prefabManager.gardenTilePrefab;
         for (var x = 0; x < width; x++) {
             for (var y = 0; y < height; y++) {
