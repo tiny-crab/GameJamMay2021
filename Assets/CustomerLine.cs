@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UniRx;
 using Unity.Linq;
+using DG.Tweening;
 
 public class CustomerLine : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class CustomerLine : MonoBehaviour
     public UniRx.IObservable<long> clickStream = Observable.EveryUpdate().Where(_ => Input.GetMouseButtonDown(0));
 
     public Datastore datastore;
+    public List<Vector3> linePositions = new List<Vector3>();
+    public Vector3 finalDestination;
 
     // Start is called before the first frame update
     void Start() {
@@ -30,9 +33,10 @@ public class CustomerLine : MonoBehaviour
             }
         });
 
-        for (var i = 0; i < 3; i++) {
-            generateCustomer();
-        }
+        linePositions = this.gameObject.Children().Where(child => child.name.StartsWith("Slot")).Select(child => child.transform.position).ToList();
+        finalDestination = this.transform.Find("FinalDestination").position;
+
+        linePositions.ForEach(position => generateCustomer(position));
 
         datastore.turnCount.Subscribe(value => {
             if (value % 12 == 0 && value != 0) {
@@ -44,16 +48,18 @@ public class CustomerLine : MonoBehaviour
         });
     }
 
-    void generateCustomer() {
+    void generateCustomer(Vector3 linePosition) {
         var origin = this.transform.position;
         var lineOffset = datastore.customers.Count * 1.5f;
-        var customer = GameObject.Instantiate(customerPrefab, origin + new Vector3(0, -lineOffset, 0), Quaternion.identity, this.transform);
+        var customer = GameObject.Instantiate(customerPrefab, linePosition, Quaternion.identity, this.transform);
+        var animator = customer.GetComponent<Animator>();
+        animator.Play("Customer_waiting");
 
         // this is a very legit way to weight certain values in a random number generator, get on my level
         var numOrders = new List<int>() {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3}.getRandomElement();
         var orderList = new List<Datastore.Order>();
         for (var i = 0; i < numOrders; i++) {
-            var order = GameObject.Instantiate(orderPrefab, origin + new Vector3(1 + .75f * i, -lineOffset, 0), Quaternion.identity, this.transform);
+            var order = GameObject.Instantiate(orderPrefab, linePosition + new Vector3(1 + .75f * i, 0, 0), Quaternion.identity, this.transform);
 
             var randomCropType = datastore.possibleCrops.getRandomElement();
             order.Children().First().assignSpriteFromPath(randomCropType.getSpritePath(randomCropType.spritePathCount));
@@ -73,6 +79,8 @@ public class CustomerLine : MonoBehaviour
         if (orderMatch.Count == 1 && datastore.storage[orderMatch[0].crop].Value > 0) {
             fulfillOrder(orderMatch.Single());
         }
+        var animator = datastore.customers.First().Key.GetComponent<Animator>();
+        animator.Play("Customer_walking");
     }
 
     void fulfillOrder(Datastore.Order order) {
@@ -95,18 +103,40 @@ public class CustomerLine : MonoBehaviour
     }
 
     void frontOfLineLeave() {
-        datastore.customers.First().Value.ForEach(order => GameObject.Destroy(order.orderButton));
-        GameObject.Destroy(datastore.customers.First().Key);
-        datastore.customers.RemoveAt(0);
+        var customer = datastore.customers.First();
+        customer.Value.ForEach(order => GameObject.Destroy(order.orderButton));
+
+        Tween customerTween = DOTween.To(
+                ()=> customer.Key.transform.position,
+                x=> customer.Key.transform.position = x,
+                finalDestination,
+                1f);
+        customerTween.OnComplete(() => {
+            GameObject.Destroy(customer.Key);
+        });
+        customerTween.Play();
+        datastore.customers.Remove(datastore.customers.First());
         shiftCustomers();
-        generateCustomer();
+        generateCustomer(linePositions.Last());
     }
 
     void shiftCustomers() {
         for (var i = 0; i < datastore.customers.Count; i++) {
-            datastore.customers[i].Key.transform.position = this.transform.position + new Vector3(0, -i, 0);
+            var customer = datastore.customers[i].Key;
+            Tween customerTween = DOTween.To(
+                ()=> customer.transform.position,
+                x=> customer.transform.position = x,
+                linePositions[i],
+                .5f).SetEase(Ease.OutQuart);
+            customerTween.Play();
             for (var j = 0; j < datastore.customers[i].Value.Count; j++) {
-                datastore.customers[i].Value[j].orderButton.transform.position = this.transform.position + new Vector3(1 + .75f * j, -i, 0);
+                var orderButton = datastore.customers[i].Value[j].orderButton.transform;
+                Tween orderTween = DOTween.To(
+                    ()=> orderButton.position,
+                    x=> orderButton.position = x,
+                    linePositions[i] + new Vector3(1 + .75f * j, 0, 0),
+                    .5f).SetEase(Ease.OutExpo).SetDelay(.05f * (j+1));
+                orderTween.Play();
             }
         }
     }
