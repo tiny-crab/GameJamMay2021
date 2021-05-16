@@ -33,7 +33,7 @@ public class Storage : MonoBehaviour
                 var cropCard = GameObject.Instantiate(storageCardPrefab, layoutGroupObject.transform);
 
                 visibleCards[entry.Key] = cropCard;
-                cropCard.transform.localScale = new Vector3(.25f, .25f, 1);
+                cropCard.transform.localScale = new Vector3(.2f, .2f, 1);
                 cropCard.transform.Find("CropIcon").GetComponent<Image>().sprite = Resources.Load<Sprite>(entry.Key.getSpritePath(entry.Key.spritePathCount));
                 entry.Value.Subscribe(quantity => {
                     cropCard.transform.Find("Quantity").GetComponent<Text>().text = quantity.ToString();
